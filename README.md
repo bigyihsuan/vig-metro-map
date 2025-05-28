@@ -37,12 +37,45 @@ This project is to be a metro map maker that *specifically* does NYC Subway 2025
   - Black-outlined white cirle + black text: limited service. White circle, with inner black outline `u/`
   - Empty: does not stop
 - Transfer possiblilites:
-  - Black rectangle: for adjacent stations. `0.5u` wide
-  - White rounded shape: for close-but-non-adjacent stations
-  - Small black line: for distant stations
-  - Dotted black line: out-of-station transfer
+  - Black rectangle: for adjacent stations. `1/2 u` wide.
+  - White rounded shape: for close-but-non-adjacent stations.
+  - Small black line: for distant stations. `1p` wide
+  - Dotted black line: out-of-station transfer. `1p` wide, with rounded dots `1p` diameter spaced `TODO p` apart
+
+### Other Rail
+
+- Has width of `1/2u = 4p`
+- Consists of white and gray stripes, each `1/4u = 1/2p`: white, gray, white, gray, gray, white, gray, white
+- Stations on other rail has inner diameter `3p` with `1/4p` white outline
+- Turning radiuses are identical to lines
+
+### Background
+
+- Background is a grid of tiles
+- Tiles will smoothly connect with other tiles, especially at 45 degrees
+- Tile types
+  - Land (white)
+  - Land (tan)
+  - Water
+  - Beach
+  - Park
+  - Border
+
+### Colors
+
+- Preset colors are all colors included on the MTA map
+- [Trunk line colors](https://en.wikipedia.org/wiki/New_York_City_Subway_nomenclature#Colors_and_trunk_lines)
+- Take other colors from color-picking on the map
+
+### Themes
+
+- Themes based on the 3 maps (day, night, winter)
+- Background colors change 1-to-1 between themes
+- Text is white on night map
 
 ## Official MTA Map Specimens
+
+![f-terminal](f-terminal.png)
 
 ![4 limited-5](4limited-5.png)
 
