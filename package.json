@@ -1,13 +1,13 @@
 {
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "eslint": "^9.27.0",
     "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.2",
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build": "bash ./build.sh",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

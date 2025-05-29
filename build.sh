@@ -1,4 +1,4 @@
 #!/usr/bin/bash
 
 npx tsc
-cp src/index.html dist
+cp index.html dist
