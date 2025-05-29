@@ -14,7 +14,7 @@
 - no NYC-style stations
 - feels jank
 
-![metromapmaker](image-metromapmaker.png)
+![metromapmaker](specimens/image-metromapmaker.png)
 
 ## <https://tennessine.co.uk/metro/>
 
@@ -31,9 +31,9 @@
 - labels often overlap each other (hard problem?)
 - auto label placement is appreciated
 
-!["Full Mta Map" exerpt A](image-tennissine-a.png)
-!["Full Mta Map" exerpt B](image-tennissine-b.png)
-!["Full Mta Map" exerpt C](image-tennissine-c.png)
+!["Full Mta Map" exerpt A](specimens/image-tennissine-a.png)
+!["Full Mta Map" exerpt B](specimens/image-tennissine-b.png)
+!["Full Mta Map" exerpt C](specimens/image-tennissine-c.png)
 
 ## <https://railmapgen.github.io/> Rail Map Painter
 
@@ -42,7 +42,7 @@
 - very complicated, it seems. exposes a lot of things to be edited
 - feels pretty weird. need to play with it more.
 
-![railmapgen](image-railmapgen.png)
+![railmapgen](specimens/image-railmapgen.png)
 
 ## <https://beno.uk/metromapcreator/>
 
@@ -50,4 +50,4 @@
 - only london underground
 - nah
 
-![metromapcreator](image-metromapcreator.png)
+![metromapcreator](specimens/image-metromapcreator.png)

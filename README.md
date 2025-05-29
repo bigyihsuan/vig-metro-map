@@ -75,22 +75,22 @@ This project is to be a metro map maker that *specifically* does NYC Subway 2025
 
 ## Official MTA Map Specimens
 
-![f-terminal](f-terminal.png)
+![f-terminal](specimens/f-terminal.png)
 
-![4 limited-5](4limited-5.png)
+![4 limited-5](specimens/4limited-5.png)
 
-![4-5-6](4-5-6.png)
+![4-5-6](specimens/4-5-6.png)
 
-![4-5-6-distant-r-w-n-out-q-f](4-5-6-distant-r-w-n-out-q-f.png)
+![4-5-6-distant-r-w-n-out-q-f](specimens/4-5-6-distant-r-w-n-out-q-f.png)
 
-![7d-7_diagonal](7d-7_diagonal.png)
+![7d-7_diagonal](specimens/7d-7_diagonal.png)
 
-![7d-7_diagonal-close-r-m-f-e](7d-7_diagonal-close-r-m-f-e.png)
+![7d-7_diagonal-close-r-m-f-e](specimens/7d-7_diagonal-close-r-m-f-e.png)
 
-![a-c-dist-3-2-dist-e-dist-r-w](a-c-dist-3-2-dist-e-dist-r-w.png)
+![a-c-dist-3-2-dist-e-dist-r-w](specimens/a-c-dist-3-2-dist-e-dist-r-w.png)
 
-![fultonst](fultonst.png)
+![fultonst](specimens/fultonst.png)
 
-![3-out-l](3-out-l.png)
+![3-out-l](specimens/3-out-l.png)
 
-![empty-c-b-empty](empty-c-b-empty.png)
+![empty-c-b-empty](specimens/empty-c-b-empty.png)
