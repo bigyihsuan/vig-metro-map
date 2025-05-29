@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "vs-code-prettier-eslint.prettierLast": true,
+    "eslint.format.enable": true,
+    "eslint.ignoreUntitled": true,
+    "eslint.lintTask.enable": true,
+    "eslint.run": "onType",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    }
+}

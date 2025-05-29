@@ -4,13 +4,32 @@
 <head>
     <meta charset="UTF-8" />
     <title>vig-metro-map</title>
-    <script src="index.js" defer></script>
+    <script src="index.js"></script>
+    <style>
+        .grid-canvas {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #grid-container {
+            position: absolute;
+            top: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+    </style>
 </head>
 
 <body>
-    <p>hello world!</p>
-    <p>TODO: the rest of the owl</p>
-    <button id="buttonTest">ts test</button>
+    <div id="design-container">
+        <div id="grid-container"></div>
+    </div>
 </body>
 
 </html>
