@@ -1,4 +1,4 @@
-import { P, U } from "./constant.js";
+import { P, U, MIN_CELLS } from "./constant.js";
 
 // based on https://www.sandromaglione.com/articles/infinite-canvas-html-with-zoom-and-pan
 // https://github.com/SandroMaglione/infinite-html-canvas
@@ -20,6 +20,8 @@ export default class InfiniteCanvas {
     private prevMouseX: number | null = null; // if null, mouse hasn't moved yet
     private prevMouseY: number | null = null; // if null, mouse hasn't moved yet
 
+    // private scollStartY: number | null = 0;
+
     constructor() {
         const canvas = document.getElementById("grid-canvas");
         if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
@@ -35,6 +37,9 @@ export default class InfiniteCanvas {
             return;
         }
         this.context = context;
+
+        // default to about 40 cells per row
+        this.zoomCells(40);
 
         this.draw();
     }
@@ -69,13 +74,22 @@ export default class InfiniteCanvas {
         return virtualY / this.scale - this.offsetY;
     }
 
-    zoom(amount: number) {
+    zoomScale(amount: number) {
         this.scale *= amount;
         this.draw();
     }
 
+    zoomCells(cells: number) {
+        // scale is some number around 1 that is multiplied to the raw pixels
+        // `canvasWidthCells` is the current number of cells in a row being displayed on the canvas
+        // `cells` is the target number of cells in a row to display on the canvas
+        // `max()` to have a max zoom of 1 cell on the screen. this also helps prevent NaNs from appearing when cells = 0
+        // the new scale is the ratio of the current and the desired
+        this.scale *= this.canvasWidthCells / Math.max(cells, MIN_CELLS);
+        this.draw();
+    }
+
     pan(dx: number, dy: number) {
-        console.log("pan", { dx, dy });
         this.offsetX += dx / this.scale;
         this.offsetY += dy / this.scale;
         this.draw();
@@ -101,12 +115,18 @@ export default class InfiniteCanvas {
         this.draw();
     }
 
+    get canvasWidthCells(): number {
+        return Math.floor((this.virtualWidth ?? 0) / this.cellSize);
+    }
+
     private setupEvents(canvas: HTMLCanvasElement) {
         // scroll down to zoom out, scroll up to zoom in
         canvas.addEventListener("wheel", (event) => {
             // event.preventDefault();
-            console.log(event);
-            this.onWheel(event.deltaY);
+            // TODO: figure out method of scaling
+            // TODO: max zoom is 1 square filling the whole screen
+            // TODO: min zoom is infinte
+            this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY));
         });
 
         // handle mouse movement
@@ -198,14 +218,6 @@ export default class InfiniteCanvas {
 
             this.context.stroke();
         }
-    }
-
-    private onWheel(dy: number) {
-        // assuming DOM_DELTA_PIXEL.
-        // scrolled by this many pixels.
-        // scale based on the cell size in px
-        const scaling = (this.cellSize + dy) / this.cellSize;
-        this.zoom(scaling);
     }
 }
 

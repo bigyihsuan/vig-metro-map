@@ -15,16 +15,18 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   </div>
 `;
 
-const infiniteCanvas = new InfiniteCanvas();
 document.addEventListener("contextmenu", (e) => e.preventDefault(), false);
+
+const infiniteCanvas = new InfiniteCanvas();
+console.log(infiniteCanvas.canvasWidthCells);
 
 document
     .getElementById("zoom-in")!
-    .addEventListener("click", () => infiniteCanvas.zoom(1.05));
+    .addEventListener("click", () => infiniteCanvas.zoomScale(1.05));
 
 document
     .getElementById("zoom-out")!
-    .addEventListener("click", () => infiniteCanvas.zoom(0.95));
+    .addEventListener("click", () => infiniteCanvas.zoomScale(0.95));
 
 document
     .getElementById("move-left")!

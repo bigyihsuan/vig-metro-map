@@ -7,7 +7,6 @@
     "eslint": "^9.27.0",
     "gh-pages": "^6.3.0",
     "globals": "^16.2.0",
-    "npm-watch": "^0.13.0",
     "prettier": "^3.5.3",
     "prettier-eslint": "^16.4.2",
     "typescript": "^5.8.3",
@@ -15,14 +14,14 @@
   },
   "homepage": "https://bigyihsuan.github.io/vig-metro-map",
   "scripts": {
-    "build": "bash ./build.sh",
-    "server": "npx -y http-server -cors ./dist",
-    "start": "npm run build && npm run server",
+    "build-ts": "npx tsc",
+    "build-html": "bash ./build-html.sh",
+    "serve": "npx -y http-server ./dist",
+    "start": "npm run build-ts && npm run build-html && npm run serve",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build",
-    "watch": "npm-watch"
-  },
-  "watch": {
-    "build": "**/*.ts"
+    "watch:build-ts": "nodemon -e ts -x \"npm run build-ts\"",
+    "watch:build-html": "nodemon -e html -x \"npm run build-html\"",
+    "watch": "npm run watch:build-ts & npm run watch:build-html"
   }
 }
