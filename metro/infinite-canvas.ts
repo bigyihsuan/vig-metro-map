@@ -13,14 +13,9 @@ export default class InfiniteCanvas {
 
     cellSize: number = U + 2 * P; // size of 1 grid cell at scale = 1
 
-    // state for panning
-    // panState: "stopped" | "moving" = "stopped";
-
     private lastMouseButton: MouseButton | null = null; // if null, mouse hasn't been pressed yet
     private prevMouseX: number | null = null; // if null, mouse hasn't moved yet
     private prevMouseY: number | null = null; // if null, mouse hasn't moved yet
-
-    // private scollStartY: number | null = 0;
 
     constructor() {
         const canvas = document.getElementById("grid-canvas");
@@ -121,22 +116,14 @@ export default class InfiniteCanvas {
 
     private setupEvents(canvas: HTMLCanvasElement) {
         // scroll down to zoom out, scroll up to zoom in
-        canvas.addEventListener("wheel", (event) => {
-            // event.preventDefault();
-            // TODO: figure out method of scaling
-            // TODO: max zoom is 1 square filling the whole screen
-            // TODO: min zoom is infinte
-            this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY));
-        });
+        canvas.addEventListener("wheel", (event) => this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY)));
 
         // handle mouse movement
         canvas.addEventListener("mousedown", (event) => {
             // both middle and right click to pan
             if ((event.button === MouseButton.RIGHT || event.button == MouseButton.AUX)) {
                 event.preventDefault();
-                // this.panState = "moving";
-                // cannot use event.movementX/Y because it's not supported by chrome
-
+                // cannot use event.movementX/movementY because it's not supported by chrome
                 // take note of the mouse button
                 this.lastMouseButton = event.button as MouseButton;
                 // take note of the click start
@@ -152,8 +139,8 @@ export default class InfiniteCanvas {
                     return;
                 }
                 event.preventDefault();
-                // cannot use event.movementX/Y because it's not supported by chrome
 
+                // cannot use event.movementX/Y because it's not supported by chrome
                 const prevX = this.prevMouseX!;
                 const prevY = this.prevMouseY!;
                 const currentX = event.clientX;
