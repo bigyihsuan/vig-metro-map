@@ -1,61 +1,43 @@
-class Grid {
-    height: number;
-    width: number;
-    canvas: HTMLCanvasElement;
-    context: CanvasRenderingContext2D;
+import InfiniteCanvas from "./metro/infinite-canvas.js";
 
-    constructor() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+  <div class="container">
+    <canvas id="grid-canvas"></canvas>
 
-        console.log(this.width, this.height);
+    <div id="controls">
+      <button type="button" id="zoom-in">+</button>
+      <button type="button" id="zoom-out">-</button>
+      <button type="button" id="move-left"><-</button>
+      <button type="button" id="move-right">-></button>
+      <button type="button" id="move-up">^</button>
+      <button type="button" id="move-down">v</button>
+    </div>
+  </div>
+`;
 
-        const pixelRatio = window.devicePixelRatio || 1;
+const infiniteCanvas = new InfiniteCanvas();
+document.addEventListener("contextmenu", (e) => e.preventDefault(), false);
 
-        // make the canvas element, and make it fit to the screen
-        this.canvas = document.createElement("canvas");
-        this.canvas.classList.add("grid-canvas");
-        this.canvas.setAttribute("width", this.width.toString());
-        this.canvas.setAttribute("height", this.height.toString());
+document
+    .getElementById("zoom-in")!
+    .addEventListener("click", () => infiniteCanvas.zoom(1.05));
 
-        document.getElementById("grid-container")?.appendChild(this.canvas);
-        const rect = this.canvas.getBoundingClientRect();
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
-        // document.getElementById("grid-container")?.removeChild(this.canvas);
+document
+    .getElementById("zoom-out")!
+    .addEventListener("click", () => infiniteCanvas.zoom(0.95));
 
-        // actually
-        this.context = this.canvas.getContext("2d")!;
-        this.context.strokeStyle = "rgb(233,233,233)";
-        this.context.scale(pixelRatio, pixelRatio);
-    }
+document
+    .getElementById("move-left")!
+    .addEventListener("click", () => infiniteCanvas.panLeft(10));
 
-    draw(dim: number, edge: [number, number]) {
-        if (!edge) edge = [0, 0];
-        const px = this.width / dim;
-        const ox = (edge[0] % 1 + 1) % 1 * px;
-        const oy = (edge[1] % 1 + 1) % 1 * px;
-        for (let x = 0; x < Math.ceil(this.width / px) + 1; x++) {
-            this.context.moveTo(x * px - ox, 0);
-            this.context.lineTo(x * px - ox, this.height);
-        }
-        for (let y = 0; y < Math.ceil(this.width / px) + 1; y++) {
-            this.context.moveTo(0, y * px - oy);
-            this.context.lineTo(this.width, y * px - oy);
-        }
-        this.context.stroke();
-        this.context.closePath();
-    }
+document
+    .getElementById("move-right")!
+    .addEventListener("click", () => infiniteCanvas.panRight(10));
 
-    zoom(dim: number, edge: [number, number]) {
-        this.context.clearRect(0, 0, this.width, this.height);
-        this.draw(dim, edge);
-    }
-}
+document
+    .getElementById("move-up")!
+    .addEventListener("click", () => infiniteCanvas.panUp(10));
 
-function setup() {
-    const grid = new Grid();
-    grid.zoom(10, [0, 0]);
-}
-
-window.addEventListener("DOMContentLoaded", setup);
+document
+    .getElementById("move-down")!
+    .addEventListener("click", () => infiniteCanvas.panDown(10));
