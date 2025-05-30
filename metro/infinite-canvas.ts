@@ -33,8 +33,7 @@ export default class InfiniteCanvas {
         }
         this.context = context;
 
-        // default to about 40 cells per row
-        this.zoomCells(40);
+        this.zoomCells(64);
 
         this.draw();
     }
@@ -183,7 +182,7 @@ export default class InfiniteCanvas {
         if (this.canvas && this.context) {
             this.context.strokeStyle = "rgb(229, 229, 229)";
             this.context.lineWidth = 1;
-            this.context.font = "10px serif";
+            // this.context.font = "10px serif";
 
             const width = this.canvas.clientWidth;
             const height = this.canvas.clientHeight;
@@ -193,14 +192,14 @@ export default class InfiniteCanvas {
                 this.context.moveTo(x, 0);
                 this.context.lineTo(x, height);
 
-                this.context.fillText(`${this.toVirtualX(x).toFixed(0)}`, x, 10);
+                // this.context.fillText(`${this.toVirtualX(x).toFixed(0)}`, x, 10);
             }
             // horizontal lines
             for (let y = (this.offsetY % this.cellSize) * this.scale; y <= height; y += this.cellSize * this.scale) {
                 this.context.moveTo(0, y);
                 this.context.lineTo(width, y);
 
-                this.context.fillText(`${this.toVirtualY(y).toFixed(0)}`, 0, y);
+                // this.context.fillText(`${this.toVirtualY(y).toFixed(0)}`, 0, y);
             }
 
             this.context.stroke();

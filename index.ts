@@ -1,5 +1,7 @@
+import { U } from "./metro/constant.js";
 import InfiniteCanvas from "./metro/infinite-canvas.js";
 
+// add the grid at runtime so that it exists before the rest of the script is loaded
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div class="container">
     <canvas id="grid-canvas"></canvas>
@@ -22,24 +24,24 @@ console.log(infiniteCanvas.canvasWidthCells);
 
 document
     .getElementById("zoom-in")!
-    .addEventListener("click", () => infiniteCanvas.zoomScale(1.05));
+    .addEventListener("click", () => infiniteCanvas.zoomCells(infiniteCanvas.canvasWidthCells - 1));
 
 document
     .getElementById("zoom-out")!
-    .addEventListener("click", () => infiniteCanvas.zoomScale(0.95));
+    .addEventListener("click", () => infiniteCanvas.zoomCells(infiniteCanvas.canvasWidthCells + 1));
 
 document
     .getElementById("move-left")!
-    .addEventListener("click", () => infiniteCanvas.panLeft(10));
+    .addEventListener("click", () => infiniteCanvas.panLeft(U));
 
 document
     .getElementById("move-right")!
-    .addEventListener("click", () => infiniteCanvas.panRight(10));
+    .addEventListener("click", () => infiniteCanvas.panRight(U));
 
 document
     .getElementById("move-up")!
-    .addEventListener("click", () => infiniteCanvas.panUp(10));
+    .addEventListener("click", () => infiniteCanvas.panUp(U));
 
 document
     .getElementById("move-down")!
-    .addEventListener("click", () => infiniteCanvas.panDown(10));
+    .addEventListener("click", () => infiniteCanvas.panDown(U));
