@@ -1,4 +1,5 @@
 import { P, U, MIN_CELLS } from "./constant.js";
+import { Mouse, MouseButton } from "./mouse.js";
 
 // based on https://www.sandromaglione.com/articles/infinite-canvas-html-with-zoom-and-pan
 // https://github.com/SandroMaglione/infinite-html-canvas
@@ -123,20 +124,16 @@ export default class Grid {
         // handle mouse movement
         canvas.addEventListener("mousedown", (event) => {
             // both middle and right click to pan
-            if ((event.button === MouseButton.RIGHT || event.button == MouseButton.AUX)) {
+            const mb = event.button as MouseButton;
+            if (Mouse.isPan(mb)) {
                 event.preventDefault();
-                // cannot use event.movementX/movementY because it's not supported by chrome
-                // take note of the mouse button
-                this.lastMouseButton = event.button as MouseButton;
-                // take note of the click start
-                this.prevMouseX = event.clientX;
-                this.prevMouseY = event.clientY;
+                this.onPanMouse(mb, event.clientX, event.clientY);
             }
         });
         canvas.addEventListener("mousemove", (event) => {
             // both middle and right click to pan
             // using lastMouseButton because the mousemove event doesn't keep track if the mouse is pressed
-            if (!!this.lastMouseButton && (this.lastMouseButton === MouseButton.RIGHT || this.lastMouseButton == MouseButton.AUX)) {
+            if (!!this.lastMouseButton && Mouse.isPan(this.lastMouseButton)) {
                 if (!this.prevMouseX || !this.prevMouseY) { // ignore if we haven't pressed the mouse button yet
                     return;
                 }
@@ -158,7 +155,7 @@ export default class Grid {
         });
 
         canvas.addEventListener("mouseup", () => {
-            if (!!this.lastMouseButton && (this.lastMouseButton! === MouseButton.RIGHT || this.lastMouseButton! === MouseButton.AUX)) {
+            if (!!this.lastMouseButton && Mouse.isPan(this.lastMouseButton)) {
                 this.lastMouseButton = null;
             }
         });
@@ -208,12 +205,13 @@ export default class Grid {
             this.context.stroke();
         }
     }
-}
 
-class MouseButton {
-    static LEFT = 0;
-    static AUX = 1;
-    static RIGHT = 2;
-    static BACK = 3;
-    static FORWARD = 4;
+    private onPanMouse(button: MouseButton, x: number, y: number) {
+        // cannot use event.movementX/movementY because it's not supported by chrome
+        // take note of the mouse button
+        this.lastMouseButton = button;
+        // take note of the click start
+        this.prevMouseX = x;
+        this.prevMouseY = y;
+    }
 }

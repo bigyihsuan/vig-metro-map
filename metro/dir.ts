@@ -1,5 +1,29 @@
 type Dir = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
 
+class Dirs {
+    public static readonly N = "N";
+    public static readonly NE = "NE";
+    public static readonly E = "E";
+    public static readonly SE = "SE";
+    public static readonly S = "S";
+    public static readonly SW = "SW";
+    public static readonly W = "W";
+    public static readonly NW = "NW";
+
+    public static offset(amount: number, dir: Dir): number {
+        switch (dir) {
+            case Dirs.N:
+            case Dirs.S:
+            case Dirs.E:
+            case Dirs.W:
+                return amount;
+            default:
+                return amount / Math.sqrt(2);
+        }
+    }
+}
+
 export {
     Dir,
+    Dirs
 };

@@ -2,7 +2,7 @@
 
 ## Units
 
-All distances in the app are in terms of a constant `u = 56px`.
+All distances in the app are in terms of a constant `u = 48px`.
 The padding unit is defined as `p = u/8 = 6px`.
 
 ## Infinite Grid

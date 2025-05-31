@@ -1,5 +1,5 @@
 import Clone from "./clone.js";
-import { Dir } from "./dir.js";
+import { Dir, Dirs } from "./dir.js";
 
 // Position is an position of (int,int).
 class Position implements Clone<Position> {
@@ -39,23 +39,24 @@ class Position implements Clone<Position> {
     }
 
     addDir(delta: number, dir: Dir): Position {
+        const o = Dirs.offset(delta, dir);
         switch (dir) {
             case "N":
-                return this.add(0, -delta);
+                return this.add(0, -o);
             case "NE":
-                return this.add(+delta, -delta);
+                return this.add(+o, -o);
             case "E":
-                return this.add(+delta, 0);
+                return this.add(+o, 0);
             case "SE":
-                return this.add(+delta, +delta);
+                return this.add(+o, +o);
             case "S":
-                return this.add(0, +delta);
+                return this.add(0, +o);
             case "SW":
-                return this.add(-delta, +delta);
+                return this.add(-o, +o);
             case "W":
-                return this.add(-delta, 0);
+                return this.add(-o, 0);
             case "NW":
-                return this.add(-delta, -delta);
+                return this.add(-o, -o);
         }
     }
 

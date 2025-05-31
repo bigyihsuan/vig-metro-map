@@ -1,3 +1,4 @@
+import { SVG_NS, U } from "./constant.js";
 import { Position } from "./position.js";
 
 // Bullet represents a station bullet.
@@ -25,6 +26,31 @@ class Bullet {
 
     toJSON() {
         return { c: this.c, style: this.style, pos: this.pos };
+    }
+
+    toSVG(): SVGElement {
+        const g = document.createElementNS(SVG_NS, "g");
+
+        const circle = document.createElementNS(SVG_NS, "circle");
+        circle.setAttribute("fill", "black");
+        circle.setAttribute("r", (U / 2).toString());
+        circle.setAttribute("cx", this.pos.x.toString());
+        circle.setAttribute("cy", this.pos.y.toString());
+
+        const letter = document.createElementNS(SVG_NS, "text");
+        letter.textContent = this.c;
+        letter.setAttribute("x", this.pos.x.toString());
+        letter.setAttribute("y", this.pos.y.toString());
+        letter.setAttribute("fill", "white");
+        letter.setAttribute("font-size", `${U}px`);
+        letter.setAttribute("font-family", "Iosevka Web");
+        letter.setAttribute("font-weight", "bold");
+        letter.setAttribute("text-anchor", "middle");
+        letter.setAttribute("dominant-baseline", "central");
+
+        g.appendChild(circle);
+        g.appendChild(letter);
+        return g;
     }
 }
 
