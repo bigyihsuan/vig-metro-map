@@ -115,7 +115,7 @@ export default class Grid {
 
     private setupEvents(canvas: HTMLCanvasElement) {
         // scroll down to zoom out, scroll up to zoom in
-        canvas.addEventListener("wheel", (event) => this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY)));
+        canvas.addEventListener("wheel", (event) => this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY)), { passive: true });
 
         // handle mouse movement
         canvas.addEventListener("mousedown", (event) => {
