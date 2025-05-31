@@ -19,9 +19,9 @@ export default class Grid {
     private prevMouseY: number | null = null; // if null, mouse hasn't moved yet
 
     constructor(initialWidthCells: number = 30) {
-        const canvas = document.getElementById("grid-canvas");
+        const canvas = document.getElementById("grid");
         if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
-            console.error("missing grid-canvas");
+            console.error("missing grid");
             return;
         }
         this.canvas = canvas;
@@ -115,7 +115,10 @@ export default class Grid {
 
     private setupEvents(canvas: HTMLCanvasElement) {
         // scroll down to zoom out, scroll up to zoom in
-        canvas.addEventListener("wheel", (event) => this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY)), { passive: true });
+        canvas.addEventListener("wheel", (event) => {
+            event.preventDefault();
+            this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY));
+        }, { passive: true });
 
         // handle mouse movement
         canvas.addEventListener("mousedown", (event) => {

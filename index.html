@@ -5,54 +5,12 @@
     <meta charset="UTF-8" />
     <title>vig-metro-map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        :root {
-            font-family: Iosevka, 'Courier New', Courier, monospace;
-            line-height: 1.5;
-            font-weight: 400;
-
-            font-synthesis: none;
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        body {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-
-            padding: 0;
-            margin: 0;
-        }
-
-        .container {
-            touch-action: none;
-            user-select: none;
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        #controls {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            z-index: 10;
-
-            display: flex;
-            column-gap: 0.5rem;
-        }
-    </style>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link href="https://iosevka-webfonts.github.io/iosevka/Iosevka.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div id="app">
-    </div>
+    <div id="app"></div>
     <script type="module" src="index.js"></script>
 </body>
 
