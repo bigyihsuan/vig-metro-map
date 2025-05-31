@@ -1,5 +1,5 @@
 import { U } from "./metro/constant.js";
-import InfiniteCanvas from "./metro/infinite-canvas.js";
+import Grid from "./metro/infinite-canvas.js";
 
 // add the grid at runtime so that it exists before the rest of the script is loaded
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
@@ -19,29 +19,16 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
 
 document.addEventListener("contextmenu", (e) => e.preventDefault(), false);
 
-const infiniteCanvas = new InfiniteCanvas();
-console.log(infiniteCanvas.canvasWidthCells);
+const grid = new Grid();
 
-document
-    .getElementById("zoom-in")!
-    .addEventListener("click", () => infiniteCanvas.zoomCells(infiniteCanvas.canvasWidthCells - 1));
+document.getElementById("zoom-in")!.addEventListener("click", () => grid.zoomCells(grid.canvasWidthCells - 1));
 
-document
-    .getElementById("zoom-out")!
-    .addEventListener("click", () => infiniteCanvas.zoomCells(infiniteCanvas.canvasWidthCells + 1));
+document.getElementById("zoom-out")!.addEventListener("click", () => grid.zoomCells(grid.canvasWidthCells + 1));
 
-document
-    .getElementById("move-left")!
-    .addEventListener("click", () => infiniteCanvas.panLeft(U));
+document.getElementById("move-left")!.addEventListener("click", () => grid.panLeft(U));
 
-document
-    .getElementById("move-right")!
-    .addEventListener("click", () => infiniteCanvas.panRight(U));
+document.getElementById("move-right")!.addEventListener("click", () => grid.panRight(U));
 
-document
-    .getElementById("move-up")!
-    .addEventListener("click", () => infiniteCanvas.panUp(U));
+document.getElementById("move-up")!.addEventListener("click", () => grid.panUp(U));
 
-document
-    .getElementById("move-down")!
-    .addEventListener("click", () => infiniteCanvas.panDown(U));
+document.getElementById("move-down")!.addEventListener("click", () => grid.panDown(U));

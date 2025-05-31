@@ -29,8 +29,6 @@ A line is considered to be curved if the cells forming the line either:
 - make an L-shape (i.e. 90 degree turn), or
 - are diagonally adjacent (45 degree turn)
 
-![line-turn](./img/architecture/line-turns.png)
-
 Visually, lines are exactly `1u` in width, with `p/2` white padding on each side.
 When turning, the innermost line has the following radiuses:
 
@@ -41,26 +39,38 @@ When turning, the innermost line has the following radiuses:
 
 The ends of lines have diameter `1/2u = 24px` (the station bullet is the end of the line).
 
-
 When multiple lines are parallel, the white padding overlaps, leaving a total gap of `1p`
 
 ## Stations
 
-- Stations always have 1 *label*
-- Stations may be connected by multiple *lines*
-- Stations may have multiple *bullets*, 1 per line connected
-- Station bullets are `1u` in diameter
-- Bullets may be:
-  - Black circle + white text: always stops
-  - Black-outlined white cirle + black text: limited service. White circle, with inner black outline `u/`
-  - Empty: does not stop
-- Transfer possiblilites:
-  - Black rectangle: for adjacent stations. `1/2 u` wide.
-  - White rounded shape: for close-but-non-adjacent stations.
-  - Small black line: for distant stations. `1p` wide
-  - Dotted black line: out-of-station transfer. `1p` wide, with rounded dots `1p` diameter spaced `TODO p` apart
+Stations are represented by a *label* and *bullets* on the grid.
+Stations have exactly 1 name.
+Stations can have 1 or more bullets.
+For each bullet, the station can be connected to 1 line.
+Stations are able to reorder their bullets, to clean up parallel lines.
+
+Station bullets are exactly `1u` diameter, filling the whole thickness of the line.
+Station bullets contain a single character in the bullet, centered to the bullet.
+Bullets may be one of the following styles:
+
+- Empty: does not stop (represented by a dotted circle, for interactivity)
+- Black circle + white text: always stops
+- Black-outlined white cirle + black text: limited service. White circle, with inner black outline `???p`
+
+For each station bullet, they may be connected to other station bullets by *transfers*.
+Transfers are placed underneath the station bullets.
+Transfers may be one of the following styles:
+
+- Black rectangle: adjacent stations *only*. `1/2 u` wide.
+- White rounded shape: non-adjacent stations within 2 cells of each other. Black outline `???p` wide, white background. These shapes are slightly larger than the bullets (`2u`?)
+- Small black line: stations that are more than 2 cells of each other. `1p` wide
+- Dotted black line: out-of-station transfer. `1p` wide, with rounded dots `1p` diameter spaced `??? p` apart
 
 ## Other Rail
+
+Other rail is a special class of line and station.
+It has a gray-striped line (white, gray, white, gray, gray, white, gray, white) and is `1/2 u` wide with `1/4 u` white padding.
+Other rail station bullets do not have contain text, and are 
 
 - Has width of `1/2u = 4p`
 - Consists of white and gray stripes, each `1/4u = 1/2p`: white, gray, white, gray, gray, white, gray, white

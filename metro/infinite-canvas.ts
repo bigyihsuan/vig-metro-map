@@ -2,7 +2,7 @@ import { P, U, MIN_CELLS } from "./constant.js";
 
 // based on https://www.sandromaglione.com/articles/infinite-canvas-html-with-zoom-and-pan
 // https://github.com/SandroMaglione/infinite-html-canvas
-export default class InfiniteCanvas {
+export default class Grid {
     canvas: HTMLCanvasElement | null = null;
     context: CanvasRenderingContext2D | null = null;
 
@@ -11,13 +11,14 @@ export default class InfiniteCanvas {
     private offsetY: number = window.innerHeight / 2;
     private scale: number = 1;
 
-    cellSize: number = U + 2 * P; // size of 1 grid cell at scale = 1
+    cellSize: number = U + P; // side length of 1 grid cell at scale = 1
+    // + P is to allow for a P/2 padding on each side of a line
 
     private lastMouseButton: MouseButton | null = null; // if null, mouse hasn't been pressed yet
     private prevMouseX: number | null = null; // if null, mouse hasn't moved yet
     private prevMouseY: number | null = null; // if null, mouse hasn't moved yet
 
-    constructor() {
+    constructor(initialWidthCells: number = 30) {
         const canvas = document.getElementById("grid-canvas");
         if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
             console.error("missing grid-canvas");
@@ -33,9 +34,8 @@ export default class InfiniteCanvas {
         }
         this.context = context;
 
-        this.zoomCells(64);
-
         this.draw();
+        this.zoomCells(initialWidthCells);
     }
 
     // the height of the inifnite canvas
@@ -160,7 +160,7 @@ export default class InfiniteCanvas {
             }
         });
 
-        canvas.addEventListener("resize", () => this.draw());
+        window.addEventListener("resize", () => this.draw());
     }
 
     private mouseDelta(start: [number, number], end: [number, number]): [number, number] {
