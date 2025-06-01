@@ -7,13 +7,13 @@ export default class Grid {
     canvas: HTMLCanvasElement | null = null;
     context: CanvasRenderingContext2D | null = null;
 
+    cellSize: number = U + P; // side length of 1 grid cell at scale = 1
+    // + P is to allow for a P/2 padding on each side of a line
+
     // offsetX and offsetY are the location of the top left corner of the infinite canvas
     private offsetX: number = window.innerWidth / 2;
     private offsetY: number = window.innerHeight / 2;
     private scale: number = 1;
-
-    cellSize: number = U + P; // side length of 1 grid cell at scale = 1
-    // + P is to allow for a P/2 padding on each side of a line
 
     private lastMouseButton: MouseButton | null = null; // if null, mouse hasn't been pressed yet
     private prevMouseX: number | null = null; // if null, mouse hasn't moved yet
@@ -127,6 +127,7 @@ export default class Grid {
             const mb = event.button as MouseButton;
             if (Mouse.isPan(mb)) {
                 event.preventDefault();
+                document.body.classList.add("panning");
                 this.onPanMouse(mb, event.clientX, event.clientY);
             }
         });
@@ -156,6 +157,7 @@ export default class Grid {
 
         canvas.addEventListener("mouseup", () => {
             if (!!this.lastMouseButton && Mouse.isPan(this.lastMouseButton)) {
+                document.body.classList.remove("panning");
                 this.lastMouseButton = null;
             }
         });

@@ -1,7 +1,8 @@
 import { Bullet } from "./bullet.js";
-import { BULLET_SPACING, SVG_NS } from "./constant.js";
+import { GRID_SQUARE } from "./constant.js";
 import { Dir } from "./dir.js";
 import { Position } from "./position.js";
+import { svg } from "./svg.js";
 
 class Station {
     name: string;
@@ -20,7 +21,7 @@ class Station {
         if (this.bullets.length === 0) {
             bullet.pos = this.root.clone();
         } else {
-            bullet.pos = this.lastBulletLocation.addDir(BULLET_SPACING, this.dir);
+            bullet.pos = this.lastBulletLocation.addDir(GRID_SQUARE, this.dir);
         }
         this.bullets.push(bullet);
     }
@@ -30,7 +31,7 @@ class Station {
     }
 
     toSVG(): SVGElement {
-        const station = document.createElementNS(SVG_NS, "g");
+        const station = svg("g") as SVGGElement;
         station.id = this.name;
         for (const bullet of this.bullets) {
             station.appendChild(bullet.toSVG());

@@ -1,5 +1,6 @@
-import { SVG_NS, U } from "./constant.js";
+import { U } from "./constant.js";
 import { Position } from "./position.js";
+import { svg } from "./svg.js";
 
 // Bullet represents a station bullet.
 class Bullet {
@@ -29,24 +30,26 @@ class Bullet {
     }
 
     toSVG(): SVGElement {
-        const g = document.createElementNS(SVG_NS, "g");
+        const g = svg("g") as SVGGElement;
 
-        const circle = document.createElementNS(SVG_NS, "circle");
-        circle.setAttribute("fill", "black");
-        circle.setAttribute("r", (U / 2).toString());
-        circle.setAttribute("cx", this.pos.x.toString());
-        circle.setAttribute("cy", this.pos.y.toString());
+        const circle = svg("circle", {
+            fill: "black",
+            r: (U / 2).toString(),
+            cx: this.pos.x.toString(),
+            cy: this.pos.y.toString(),
+        }) as SVGCircleElement;
 
-        const letter = document.createElementNS(SVG_NS, "text");
+        const letter = svg("text", {
+            "x": this.pos.x.toString(),
+            "y": this.pos.y.toString(),
+            "fill": "white",
+            "font-size": `${U}px`,
+            "font-family": "Iosevka Web",
+            "font-weight": "bold",
+            "text-anchor": "middle",
+            "dominant-baseline": "central",
+        }) as SVGTextElement;
         letter.textContent = this.c;
-        letter.setAttribute("x", this.pos.x.toString());
-        letter.setAttribute("y", this.pos.y.toString());
-        letter.setAttribute("fill", "white");
-        letter.setAttribute("font-size", `${U}px`);
-        letter.setAttribute("font-family", "Iosevka Web");
-        letter.setAttribute("font-weight", "bold");
-        letter.setAttribute("text-anchor", "middle");
-        letter.setAttribute("dominant-baseline", "central");
 
         g.appendChild(circle);
         g.appendChild(letter);
