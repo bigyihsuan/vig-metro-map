@@ -1,219 +1,58 @@
-import { P, U, MIN_CELLS } from "./constant.js";
-import { Mouse, MouseButton } from "./mouse.js";
+import { P, U } from "./constant.js";
 
 // based on https://www.sandromaglione.com/articles/infinite-canvas-html-with-zoom-and-pan
 // https://github.com/SandroMaglione/infinite-html-canvas
 export default class Grid {
-    canvas: HTMLCanvasElement | null = null;
-    context: CanvasRenderingContext2D | null = null;
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
 
     cellSize: number = U + P; // side length of 1 grid cell at scale = 1
     // + P is to allow for a P/2 padding on each side of a line
 
-    // offsetX and offsetY are the location of the top left corner of the infinite canvas
-    private offsetX: number = window.innerWidth / 2;
-    private offsetY: number = window.innerHeight / 2;
-    private scale: number = 1;
+    width: number = window.innerWidth;
+    height: number = window.innerHeight;
 
-    private lastMouseButton: MouseButton | null = null; // if null, mouse hasn't been pressed yet
-    private prevMouseX: number | null = null; // if null, mouse hasn't moved yet
-    private prevMouseY: number | null = null; // if null, mouse hasn't moved yet
+    constructor() {
+        this.canvas = document.createElement("canvas");
+        this.canvas.classList.add("grid-canvas");
+        this.canvas.setAttribute("width", this.width.toString());
+        this.canvas.setAttribute("height", this.height.toString());
 
-    constructor(initialWidthCells: number = 30) {
-        const canvas = document.getElementById("grid");
-        if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
-            console.error("missing grid");
-            return;
+        // set the canvas dimensions to its size in the viewport
+        document.getElementById("grid-container")?.appendChild(this.canvas);
+        const bounds = this.canvas.getBoundingClientRect();
+        this.canvas.width = bounds.width;
+        this.canvas.width = bounds.height;
+        document.getElementById("grid-container")?.removeChild(this.canvas);
+
+        this.context = this.canvas.getContext("2d")!;
+        this.context.strokeStyle = "rgb(233,233,233)";
+    }
+
+    zoom(zoom: number, x: number, y: number) {
+        this.context?.clearRect(0, 0, this.width, this.height);
+        this.draw(zoom, x, y);
+    }
+
+    draw(zoom: number, x: number, y: number) {
+        const scale = this.width / zoom;
+        const offsetX
+            = Math.abs(x % 1) /* positive fractional part of x */
+                * scale;
+        const offsetY
+            = Math.abs(y % 1) /* positive fractional part of y */
+                * scale;
+
+        this.context.beginPath();
+        for (let x = 0; x < Math.ceil(this.width / scale) + 1; x++) {
+            this.context.moveTo(x * scale - offsetX, 0);
+            this.context.lineTo(x * scale - offsetX, this.height);
         }
-        this.canvas = canvas;
-        this.setupEvents(this.canvas);
-
-        const context = this.canvas.getContext("2d");
-        if (!context) {
-            console.error("missing context on canvas");
-            return;
+        for (let y = 0; y < Math.ceil(this.height / scale) + 1; y++) {
+            this.context.moveTo(0, y * scale - offsetY);
+            this.context.lineTo(this.width, y * scale - offsetY);
         }
-        this.context = context;
-
-        this.draw();
-        this.zoomCells(initialWidthCells);
-    }
-
-    // the height of the inifnite canvas
-    get virtualHeight(): number {
-        return (this.canvas?.clientHeight ?? 0) / this.scale;
-    }
-
-    // the width of the inifnite canvas
-    get virtualWidth(): number {
-        return (this.canvas?.clientWidth ?? 0) / this.scale;
-    }
-
-    // real to virtual
-    toVirtualX(realX: number): number {
-        return (realX + this.offsetX) * this.scale;
-    }
-
-    // real to virtual
-    toVirtualY(realY: number): number {
-        return (realY + this.offsetY) * this.scale;
-    }
-
-    // virtual to real
-    toRealX(virtualX: number): number {
-        return virtualX / this.scale - this.offsetX;
-    }
-
-    // virtual to real
-    toRealY(virtualY: number): number {
-        return virtualY / this.scale - this.offsetY;
-    }
-
-    zoomScale(amount: number) {
-        this.scale *= amount;
-        this.draw();
-    }
-
-    zoomCells(cells: number) {
-        // scale is some number around 1 that is multiplied to the raw pixels
-        // `canvasWidthCells` is the current number of cells in a row being displayed on the canvas
-        // `cells` is the target number of cells in a row to display on the canvas
-        // `max()` to have a max zoom of 1 cell on the screen. this also helps prevent NaNs from appearing when cells = 0
-        // the new scale is the ratio of the current and the desired
-        this.scale *= this.canvasWidthCells / Math.max(cells, MIN_CELLS);
-        this.draw();
-    }
-
-    pan(dx: number, dy: number) {
-        this.offsetX += dx / this.scale;
-        this.offsetY += dy / this.scale;
-        this.draw();
-    }
-
-    panLeft(amount: number) {
-        this.offsetX -= amount;
-        this.draw();
-    };
-
-    panRight(amount: number) {
-        this.offsetX += amount;
-        this.draw();
-    };
-
-    panUp(amount: number) {
-        this.offsetY -= amount;
-        this.draw();
-    };
-
-    panDown(amount: number) {
-        this.offsetY += amount;
-        this.draw();
-    }
-
-    get canvasWidthCells(): number {
-        return Math.floor((this.virtualWidth ?? 0) / this.cellSize);
-    }
-
-    private setupEvents(canvas: HTMLCanvasElement) {
-        // scroll down to zoom out, scroll up to zoom in
-        canvas.addEventListener("wheel", (event) => {
-            event.preventDefault();
-            this.zoomCells(this.canvasWidthCells + Math.sign(event.deltaY));
-        }, { passive: true });
-
-        // handle mouse movement
-        canvas.addEventListener("mousedown", (event) => {
-            // both middle and right click to pan
-            const mb = event.button as MouseButton;
-            if (Mouse.isPan(mb)) {
-                event.preventDefault();
-                document.body.classList.add("panning");
-                this.onPanMouse(mb, event.clientX, event.clientY);
-            }
-        });
-        canvas.addEventListener("mousemove", (event) => {
-            // both middle and right click to pan
-            // using lastMouseButton because the mousemove event doesn't keep track if the mouse is pressed
-            if (!!this.lastMouseButton && Mouse.isPan(this.lastMouseButton)) {
-                if (!this.prevMouseX || !this.prevMouseY) { // ignore if we haven't pressed the mouse button yet
-                    return;
-                }
-                event.preventDefault();
-
-                // cannot use event.movementX/Y because it's not supported by chrome
-                const prevX = this.prevMouseX!;
-                const prevY = this.prevMouseY!;
-                const currentX = event.clientX;
-                const currentY = event.clientY;
-
-                const [dx, dy] = this.mouseDelta([prevX, prevY], [currentX, currentY]);
-                this.pan(dx, dy);
-            }
-
-            // note the new mouse position
-            this.prevMouseX = event.clientX;
-            this.prevMouseY = event.clientY;
-        });
-
-        canvas.addEventListener("mouseup", () => {
-            if (!!this.lastMouseButton && Mouse.isPan(this.lastMouseButton)) {
-                document.body.classList.remove("panning");
-                this.lastMouseButton = null;
-            }
-        });
-
-        window.addEventListener("resize", () => this.draw());
-    }
-
-    private mouseDelta(start: [number, number], end: [number, number]): [number, number] {
-        const dx = end[0] - start[0];
-        const dy = end[1] - start[1];
-        return [dx, dy];
-    }
-
-    private draw() {
-        if (this.canvas && this.context) {
-            this.canvas.width = document.body.clientWidth;
-            this.canvas.height = document.body.clientHeight;
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.drawGrid();
-        }
-    }
-
-    private drawGrid() {
-        if (this.canvas && this.context) {
-            this.context.strokeStyle = "rgb(229, 229, 229)";
-            this.context.lineWidth = 1;
-            // this.context.font = "10px serif";
-
-            const width = this.canvas.clientWidth;
-            const height = this.canvas.clientHeight;
-            this.context.beginPath();
-            // vertical lines
-            for (let x = (this.offsetX % this.cellSize) * this.scale; x <= width; x += this.cellSize * this.scale) {
-                this.context.moveTo(x, 0);
-                this.context.lineTo(x, height);
-
-                // this.context.fillText(`${this.toVirtualX(x).toFixed(0)}`, x, 10);
-            }
-            // horizontal lines
-            for (let y = (this.offsetY % this.cellSize) * this.scale; y <= height; y += this.cellSize * this.scale) {
-                this.context.moveTo(0, y);
-                this.context.lineTo(width, y);
-
-                // this.context.fillText(`${this.toVirtualY(y).toFixed(0)}`, 0, y);
-            }
-
-            this.context.stroke();
-        }
-    }
-
-    private onPanMouse(button: MouseButton, x: number, y: number) {
-        // cannot use event.movementX/movementY because it's not supported by chrome
-        // take note of the mouse button
-        this.lastMouseButton = button;
-        // take note of the click start
-        this.prevMouseX = x;
-        this.prevMouseY = y;
+        this.context.stroke();
+        this.context.closePath();
     }
 }

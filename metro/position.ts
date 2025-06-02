@@ -1,4 +1,4 @@
-import Clone from "./clone.js";
+import Clone from "../interface/clone.js";
 import { Dir, Dirs } from "./dir.js";
 
 // Position is an position of (int,int).

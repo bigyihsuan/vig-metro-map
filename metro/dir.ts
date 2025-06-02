@@ -21,6 +21,27 @@ class Dirs {
                 return amount / Math.sqrt(2);
         }
     }
+
+    public static opposite(dir: Dir): Dir {
+        switch (dir) {
+            case Dirs.N:
+                return Dirs.S;
+            case Dirs.NE:
+                return Dirs.SW;
+            case Dirs.E:
+                return Dirs.W;
+            case Dirs.SE:
+                return Dirs.NW;
+            case Dirs.S:
+                return Dirs.N;
+            case Dirs.SW:
+                return Dirs.NE;
+            case Dirs.W:
+                return Dirs.E;
+            case Dirs.NW:
+                return Dirs.SE;
+        }
+    }
 }
 
 export {
