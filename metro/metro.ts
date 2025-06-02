@@ -1,6 +1,6 @@
 import { Color } from "./color.js";
 import Grid from "./grid.js";
-import { PanHandler } from "./panner.js";
+import { PanHandler } from "./pan-handler.js";
 import { Position } from "./position.js";
 import { Station } from "./station.js";
 import { svg } from "./svg.js";
@@ -22,8 +22,10 @@ class Metro {
 
     pixelWidth: number;
     pixelHeight: number;
-    pixelOffset: number = 360;
+    pixelOffset: number = 0;
     dimensions: { x: number; y: number; h: number; w: number };
+
+    lineWidth: number = 0.2;
 
     constructor() {
         this.pixelWidth = window.innerWidth;
@@ -54,7 +56,7 @@ class Metro {
     pan(zoom: number, dx: number, dy: number) {
         this.svg.setAttribute(
             "viewBox",
-            `${this.dimensions.x + dx},${this.dimensions.y + dy},${this.dimensions.w},${this.dimensions.h}`
+            `${this.dimensions.x + dx},${this.dimensions.y + dy},${this.dimensions.w},${this.dimensions.h}`,
         );
         this.dimensions.x += dx;
         this.dimensions.y += dy;
@@ -62,6 +64,7 @@ class Metro {
     }
 
     draw(): Promise<void> {
+        // return new Promise<void>(() => {});
         return new Promise((resolve) => {
             document.body.appendChild(this.svg);
             function finishDraw(metro: Metro) {
@@ -100,6 +103,8 @@ class Metro {
         const Tx = center.x - width / this.pixelWidth * ((this.pixelWidth - this.pixelOffset) / 2 + this.pixelOffset);
         const Ty = center.y - height / 2;
         this.grid.zoom(width, Tx, Ty);
+
+        this.dimensions = { x: Tx, y: Ty, w: width, h: height };
     }
 
     get extrema(): { minX: number; minY: number; maxX: number; maxY: number } {

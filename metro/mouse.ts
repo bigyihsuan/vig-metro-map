@@ -9,6 +9,23 @@ class Mouse {
     public static isPan(m: MouseButton): boolean {
         return m === Mouse.aux || m === Mouse.right;
     }
+
+    public static toString(m: MouseButton): string {
+        switch (m) {
+            case this.left:
+                return "Mouse.left";
+            case this.aux:
+                return "Mouse.aux";
+            case this.right:
+                return "Mouse.right";
+            case this.back:
+                return "Mouse.back";
+            case this.forward:
+                return "Mouse.forward";
+            default:
+                return `invalid mouse button ${m}`;
+        }
+    }
 }
 
 export {

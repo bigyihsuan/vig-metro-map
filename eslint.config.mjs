@@ -19,7 +19,7 @@ export default defineConfig([
         braceStyle: "1tbs",
         // blockSpacing: true,
         // quoteProps: "consistent-as-needed",
-        commaDangle: "only-multiline",
+        commaDangle: "always-multiline",
         severity: "error",
     }),
     tseslint.configs.recommended,

@@ -1,7 +1,7 @@
 :root {
     font-family: 'Iosevka Web', 'Courier New', Courier, monospace;
-    line-height: 1.5;
-    font-weight: 400;
+    /* line-height: 1.5;
+    font-weight: 400; */
 
     font-synthesis: none;
     text-rendering: optimizeLegibility;
@@ -10,14 +10,17 @@
     -webkit-text-size-adjust: 100%;
 }
 
-body {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
+html{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
+}
+
+body{
+    padding:0;
+    margin:0;
+    font-size:12pt;
+    background:rgb(253, 253, 244);
 }
 
 /* change to the grabbing cursor when panning */
@@ -29,27 +32,22 @@ html, body {
     overscroll-behavior: none
 }
 
-.container {
-    touch-action: none;
-    user-select: none;
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+#app {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
 }
 
-#controls {
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-    z-index: 10;
-
-    display: flex;
-    column-gap: 0.5rem;
-}
-
-button {
-    font-family: 'Iosevka Web', 'Courier New', Courier, monospace;
+.grid-canvas, .drag-canvas{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:100%;
 }
 
 #svg-container, #grid-container{

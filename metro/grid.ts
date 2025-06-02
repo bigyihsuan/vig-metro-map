@@ -13,20 +13,24 @@ export default class Grid {
     height: number = window.innerHeight;
 
     constructor() {
+        const pixelRatio = window.devicePixelRatio || 1;
         this.canvas = document.createElement("canvas");
         this.canvas.classList.add("grid-canvas");
-        this.canvas.setAttribute("width", this.width.toString());
-        this.canvas.setAttribute("height", this.height.toString());
+        this.canvas.setAttribute("width", (this.width * pixelRatio).toString());
+        this.canvas.setAttribute("height", (this.height * pixelRatio).toString());
 
         // set the canvas dimensions to its size in the viewport
         document.getElementById("grid-container")?.appendChild(this.canvas);
         const bounds = this.canvas.getBoundingClientRect();
-        this.canvas.width = bounds.width;
-        this.canvas.width = bounds.height;
+        this.canvas.width = bounds.width * pixelRatio;
+        this.canvas.width = bounds.height * pixelRatio;
         document.getElementById("grid-container")?.removeChild(this.canvas);
 
         this.context = this.canvas.getContext("2d")!;
-        this.context.strokeStyle = "rgb(233,233,233)";
+        this.context.strokeStyle = "red";
+        // this.context.strokeStyle = "rgb(233,233,233)";
+        this.context.lineWidth = 1;
+        this.context.scale(pixelRatio, pixelRatio);
     }
 
     zoom(zoom: number, x: number, y: number) {
@@ -36,21 +40,23 @@ export default class Grid {
 
     draw(zoom: number, x: number, y: number) {
         const scale = this.width / zoom;
-        const offsetX
-            = Math.abs(x % 1) /* positive fractional part of x */
-                * scale;
-        const offsetY
-            = Math.abs(y % 1) /* positive fractional part of y */
-                * scale;
+        const offsetX = scale
+            * Math.abs(x % 1); // positive fractional part of x
+        const offsetY = scale
+            * Math.abs(y % 1); // positive fractional part of y
 
         this.context.beginPath();
         for (let x = 0; x < Math.ceil(this.width / scale) + 1; x++) {
-            this.context.moveTo(x * scale - offsetX, 0);
-            this.context.lineTo(x * scale - offsetX, this.height);
+            if (x % this.cellSize === 0) {
+                this.context.moveTo(x * scale - offsetX, 0);
+                this.context.lineTo(x * scale - offsetX, this.height);
+            }
         }
         for (let y = 0; y < Math.ceil(this.height / scale) + 1; y++) {
-            this.context.moveTo(0, y * scale - offsetY);
-            this.context.lineTo(this.width, y * scale - offsetY);
+            if (y % this.cellSize === 0) {
+                this.context.moveTo(0, y * scale - offsetY);
+                this.context.lineTo(this.width, y * scale - offsetY);
+            }
         }
         this.context.stroke();
         this.context.closePath();

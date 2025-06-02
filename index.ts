@@ -34,7 +34,7 @@ function setup() {
         metro,
         metro.stationsGroup,
         "test station",
-        new Position(metro.grid.width / 2, metro.grid.height / 2),
+        new Position(0, 0),
         Dirs.E);
 
     for (let i = 0; i < 4; i++) {
