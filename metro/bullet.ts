@@ -1,14 +1,14 @@
 import { U } from "./constant.js";
-import { Position } from "./position.js";
+import { MetroPosition } from "./position.js";
 import { svg } from "./svg.js";
 
 // Bullet represents a station bullet.
 class Bullet {
     private _c: string = "";
     style: BulletStyle = "local";
-    pos: Position;
+    pos: MetroPosition;
 
-    constructor(c: string, pos: Position = new Position(0, 0)) {
+    constructor(c: string, pos: MetroPosition = new MetroPosition(0, 0)) {
         this.c = c;
         this.pos = pos;
     }
@@ -32,16 +32,17 @@ class Bullet {
     toSVG(): SVGElement {
         const g = svg("g") as SVGGElement;
 
+        const { x, y } = this.pos.toReal();
         const circle = svg("circle", {
             fill: "black",
             r: (U / 2).toString(),
-            cx: this.pos.x.toString(),
-            cy: this.pos.y.toString(),
+            cx: x.toString(),
+            cy: y.toString(),
         }) as SVGCircleElement;
 
         const letter = svg("text", {
-            "x": this.pos.x.toString(),
-            "y": this.pos.y.toString(),
+            "x": x.toString(),
+            "y": y.toString(),
             "fill": "white",
             "font-size": `${U}px`,
             "font-family": "Iosevka Web",

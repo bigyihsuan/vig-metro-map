@@ -1,7 +1,7 @@
 import { Color } from "./color.js";
 import Grid from "./grid.js";
 import { PanHandler } from "./pan-handler.js";
-import { Position } from "./position.js";
+import { MetroPosition } from "./position.js";
 import { Station } from "./station.js";
 import { svg } from "./svg.js";
 
@@ -51,6 +51,8 @@ class Metro {
         document.getElementById("grid-container")!.appendChild(this.grid.canvas);
         document.getElementById("svg-container")!.innerHTML = "";
         document.getElementById("svg-container")!.appendChild(this.svg);
+
+        window.addEventListener("resize", () => this.zoomToFit());
     }
 
     pan(zoom: number, dx: number, dy: number) {
@@ -73,6 +75,10 @@ class Metro {
                 for (const station of metro.stations) {
                     station.draw();
                 }
+                if (metro.svg.parentElement === document.body) {
+                    document.body.removeChild(metro.svg);
+                }
+                metro.zoomToFit();
                 resolve();
             }
 
@@ -87,7 +93,10 @@ class Metro {
         };
         const minWidth = (this.extrema.maxX - this.extrema.minX) * this.pixelWidth / (this.pixelWidth - this.pixelOffset);
         const minHeight = (this.extrema.maxY - this.extrema.minY) * this.pixelWidth / (this.pixelWidth - this.pixelOffset);
+
         this.zoom = Math.ceil(Math.max(minWidth, minHeight));
+        if (this.zoom < 15) this.zoom = 15;
+
         this.zoomTo(this.zoom, center);
     }
 
@@ -118,7 +127,7 @@ class Metro {
     }
 }
 class Tile {
-    pos: Position = new Position(0, 0);
+    pos: MetroPosition = new MetroPosition(0, 0);
 
     draw(): SVGElement {
         // TODO

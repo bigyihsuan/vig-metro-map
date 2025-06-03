@@ -1,8 +1,13 @@
 import Clone from "../interface/clone.js";
+import { GRID_SQUARE } from "./constant.js";
 import { Dir, Dirs } from "./dir.js";
 
-// Position is an position of (int,int).
-class Position implements Clone<Position> {
+/** @type MetroPosition
+* is a position of (int,int).
+* it represents the grid of elements of the metro.
+* all coordinates are aligned to the integer grid.
+*/
+export class MetroPosition implements Clone<MetroPosition> {
     private _x: number = 0;
     private _y: number = 0;
 
@@ -11,8 +16,19 @@ class Position implements Clone<Position> {
         this.y = y;
     }
 
-    clone(): Position {
-        return new Position(this.x, this.y);
+    /** @param x real x-coord
+     * @param y real y-coord
+     * @returns the MetroPosition at that real coordinate
+     */
+    public static fromReal(x: number, y: number): MetroPosition {
+        return new MetroPosition(
+            x / GRID_SQUARE,
+            y / GRID_SQUARE,
+        );
+    }
+
+    clone(): MetroPosition {
+        return new MetroPosition(this.x, this.y);
     }
 
     get x(): number {
@@ -31,38 +47,50 @@ class Position implements Clone<Position> {
         this._y = Math.floor(y);
     }
 
-    add(dx: number, dy: number): Position {
+    /**
+     * add creates a new position, since classes are reference types
+     * @param d the other position to add to this
+     * @returns the new position
+     */
+    add(d: MetroPosition): MetroPosition {
         const next = this.clone();
-        next.x += dx;
-        next.y += dy;
+        next.x += d.x;
+        next.y += d.y;
         return next;
     }
 
-    addDir(delta: number, dir: Dir): Position {
-        const o = Dirs.offset(delta, dir);
-        switch (dir) {
-            case "N":
-                return this.add(0, -o);
-            case "NE":
-                return this.add(+o, -o);
-            case "E":
-                return this.add(+o, 0);
-            case "SE":
-                return this.add(+o, +o);
-            case "S":
-                return this.add(0, +o);
-            case "SW":
-                return this.add(-o, +o);
-            case "W":
-                return this.add(-o, 0);
-            case "NW":
-                return this.add(-o, -o);
-        }
+    /**
+     * makes a new position with the given delta and direction
+     * @param delta real-space distance to add
+     * @param dir direction to add in
+     * @returns a new position
+     */
+    addDelta(delta: number, dir: Dir): MetroPosition {
+        return this.add(Dirs.unitOffset(dir).scale(delta));
+    }
+
+    /**
+     * scales this position with the given scaling factor
+     * @param scalar the scaling factor
+     * @returns a new position, with the coordinates scaled
+     */
+    scale(scalar: number): MetroPosition {
+        return new MetroPosition(
+            this.x * scalar,
+            this.y * scalar,
+        );
     }
 
     toJSON() {
         return { x: this.x, y: this.y };
     }
-}
 
-export { Position };
+    /** converts to "real" coordinates, for SVG and canvas.
+     */
+    toReal(): { x: number; y: number } {
+        return {
+            x: this.x * GRID_SQUARE,
+            y: this.y * GRID_SQUARE,
+        };
+    }
+}

@@ -1,3 +1,5 @@
+import { MetroPosition } from "./position.js";
+
 type Dir = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
 
 class Dirs {
@@ -19,6 +21,27 @@ class Dirs {
                 return amount;
             default:
                 return amount / Math.sqrt(2);
+        }
+    }
+
+    public static unitOffset(dir: Dir): MetroPosition {
+        switch (dir) {
+            case Dirs.N:
+                return new MetroPosition(0, -1);
+            case Dirs.NE:
+                return new MetroPosition(1, -1);
+            case Dirs.E:
+                return new MetroPosition(1, 0);
+            case Dirs.SE:
+                return new MetroPosition(1, 1);
+            case Dirs.S:
+                return new MetroPosition(0, 1);
+            case Dirs.SW:
+                return new MetroPosition(-1, 1);
+            case Dirs.W:
+                return new MetroPosition(-1, 0);
+            case Dirs.NW:
+                return new MetroPosition(-1, -1);
         }
     }
 
@@ -46,5 +69,5 @@ class Dirs {
 
 export {
     Dir,
-    Dirs
+    Dirs,
 };

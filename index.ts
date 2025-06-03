@@ -1,7 +1,7 @@
 import { Bullet } from "./metro/bullet.js";
 import { Dirs } from "./metro/dir.js";
 import { Metro } from "./metro/metro.js";
-import { Position } from "./metro/position.js";
+import { MetroPosition } from "./metro/position.js";
 import { Station } from "./metro/station.js";
 
 // add the grid at runtime so that it exists before the rest of the script is loaded
@@ -34,8 +34,8 @@ function setup() {
         metro,
         metro.stationsGroup,
         "test station",
-        new Position(0, 0),
-        Dirs.E);
+        new MetroPosition(5, 5),
+        Dirs.SE);
 
     for (let i = 0; i < 4; i++) {
         station.addBullet(new Bullet(String.fromCharCode("A".charCodeAt(0) + i)));
