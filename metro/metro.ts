@@ -52,7 +52,7 @@ class Metro {
         document.getElementById("svg-container")!.innerHTML = "";
         document.getElementById("svg-container")!.appendChild(this.svg);
 
-        window.addEventListener("resize", () => this.zoomToFit());
+        window.addEventListener("resize", () => this.resize());
     }
 
     pan(zoom: number, dx: number, dy: number) {
@@ -62,7 +62,7 @@ class Metro {
         );
         this.dimensions.x += dx;
         this.dimensions.y += dy;
-        this.grid.zoom(zoom, this.dimensions.x, this.dimensions.y);
+        this.grid.zoom(zoom, this.dimensions);
     }
 
     draw(): Promise<void> {
@@ -111,9 +111,16 @@ class Metro {
         const height = width * this.pixelHeight / this.pixelWidth;
         const Tx = center.x - width / this.pixelWidth * ((this.pixelWidth - this.pixelOffset) / 2 + this.pixelOffset);
         const Ty = center.y - height / 2;
-        this.grid.zoom(width, Tx, Ty);
+        this.grid.zoom(width, { x: Tx, y: Ty });
 
         this.dimensions = { x: Tx, y: Ty, w: width, h: height };
+    }
+
+    resize() {
+        this.svg.setAttribute(
+            "viewBox",
+            `${this.dimensions.x},${this.dimensions.y},${this.dimensions.w},${this.dimensions.h}`,
+        );
     }
 
     get extrema(): { minX: number; minY: number; maxX: number; maxY: number } {

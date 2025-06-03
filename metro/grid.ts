@@ -13,6 +13,10 @@ export default class Grid {
     width: number = window.innerWidth;
     height: number = window.innerHeight;
 
+    offsetX: number = 0;
+    offsetY: number = 0;
+    scale: number = 1;
+
     constructor() {
         const pixelRatio = window.devicePixelRatio || 1;
 
@@ -28,34 +32,78 @@ export default class Grid {
         document.getElementById("grid-container")?.removeChild(this.canvas);
 
         this.context = this.canvas.getContext("2d")!;
-        this.context.strokeStyle = "red";
-        // this.context.strokeStyle = "rgb(233,233,233)";
-        this.context.lineWidth = 1;
         this.context.scale(pixelRatio, pixelRatio);
+
+        window.addEventListener("resize", () => this.draw());
     }
 
-    zoom(zoom: number, x: number, y: number) {
-        this.context?.clearRect(0, 0, this.width, this.height);
-        this.draw(zoom, x, y);
+    // the height of the inifnite canvas
+    get virtualHeight(): number {
+        return (this.canvas?.clientHeight ?? 0) / this.scale;
     }
 
-    draw(zoom: number, x: number, y: number) {
-        const scale = this.width / zoom;
-        const offsetX = scale
-            * Math.abs(x % 1); // positive fractional part of x
-        const offsetY = scale
-            * Math.abs(y % 1); // positive fractional part of y
+    // the width of the inifnite canvas
+    get virtualWidth(): number {
+        return (this.canvas?.clientWidth ?? 0) / this.scale;
+    }
 
-        this.context.beginPath();
-        for (let x = 0; x < Math.ceil(this.width / scale) + 1; x += this.cellSize) {
-            this.context.moveTo(x * scale - offsetX, 0);
-            this.context.lineTo(x * scale - offsetX, this.height);
+    // real to virtual
+    toVirtualX(realX: number): number {
+        return (realX + this.offsetX) * this.scale;
+    }
+
+    // real to virtual
+    toVirtualY(realY: number): number {
+        return (realY + this.offsetY) * this.scale;
+    }
+
+    // virtual to real
+    toRealX(virtualX: number): number {
+        return virtualX / this.scale - this.offsetX;
+    }
+
+    // virtual to real
+    toRealY(virtualY: number): number {
+        return virtualY / this.scale - this.offsetY;
+    }
+
+    zoom(zoom: number, edge: { x: number; y: number }) {
+        if (!edge) edge = { x: 0, y: 0 };
+        this.scale = this.width / zoom;
+        this.offsetX = (this.cellSize / 2 - edge.x) * this.scale;
+        this.offsetY = (this.cellSize / 2 - edge.y) * this.scale;
+        this.draw();
+    }
+
+    draw() {
+        if (this.canvas && this.context) {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawGrid();
         }
-        for (let y = 0; y < Math.ceil(this.height / scale) + 1; y += this.cellSize) {
-            this.context.moveTo(0, y * scale - offsetY);
-            this.context.lineTo(this.width, y * scale - offsetY);
+    }
+
+    drawGrid() {
+        if (this.canvas && this.context) {
+            const width = this.canvas.clientWidth;
+            const height = this.canvas.clientHeight;
+
+            this.context.beginPath();
+            this.context.strokeStyle = "rgb(233,233,233)";
+            this.context.lineWidth = 1;
+            // vertical lines
+            for (let x = (this.offsetX % this.cellSize) * this.scale; x <= width; x += this.cellSize * this.scale) {
+                this.context.moveTo(x, 0);
+                this.context.lineTo(x, height);
+            }
+            // horizontal lines
+            for (let y = (this.offsetY % this.cellSize) * this.scale; y <= height; y += this.cellSize * this.scale) {
+                this.context.moveTo(0, y);
+                this.context.lineTo(width, y);
+            }
+
+            this.context.stroke();
         }
-        this.context.stroke();
-        this.context.closePath();
     }
 }
