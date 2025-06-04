@@ -27,10 +27,6 @@ export class PanHandler {
         this.enable();
     }
 
-    get scale(): number {
-        return window.innerWidth / this.metro.zoomPx;
-    }
-
     enable() {
         this.disable();
         this.div.addEventListener("mousedown", this.listeners.beginPan);
@@ -65,7 +61,8 @@ export class PanHandler {
             this.prevMouseX = event.clientX;
             this.prevMouseY = event.clientY;
 
-            this.metro.pan(this.metro.zoomPx, dx * this.scale, dy * this.scale);
+            // divide to slow panning when zoomed in, and speed when zoomed out
+            this.metro.pan(this.metro.zoomPx, dx / this.metro.scale, dy / this.metro.scale);
         }
     }
 
@@ -83,8 +80,13 @@ export class PanHandler {
 
     wheel(event: WheelEvent) {
         const sign = Math.sign(event.deltaY);
+        // Increase or decrease zoomPx by one cell width per wheel event
         this.metro.zoomPx += -sign * CELL_WIDTH_PX;
-        const scale = this.metro.zoomPx / window.innerWidth;
-        this.metro.scale(scale);
+        // Clamp zoomPx to a minimum value if needed
+        if (this.metro.zoomPx < CELL_WIDTH_PX) this.metro.zoomPx = CELL_WIDTH_PX;
+        // Calculate new scale
+        const scale = window.innerWidth / this.metro.zoomPx;
+        this.metro.zoom(scale);
+        this.metro.resize();
     }
 }

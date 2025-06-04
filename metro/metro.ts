@@ -1,12 +1,12 @@
-import { Color } from "../shared/color.js";
 import Grid from "./grid.js";
 import { PanHandler } from "./pan-handler.js";
-import { MetroPosition } from "../shared/position.js";
 import { Station } from "./station.js";
 import { svg } from "../shared/svg.js";
 import { CELL_WIDTH_PX } from "../shared/constant.js";
+import { Line } from "./line.js";
+import { Tile } from "./tile.js";
 
-class Metro {
+export class Metro {
     background: Tile[] = [];
     lines: Line[] = [];
     stations: Station[] = [];
@@ -68,11 +68,15 @@ class Metro {
         this.grid.zoomTo(newWindowWidthPx, this.dimensions);
     }
 
-    scale(scale: number) {
-        this.svg.setAttribute("transform", `scale(${scale})`);
-        this.svg.setAttribute("width", this.pixelWidth.toString());
-        this.svg.setAttribute("height", this.pixelHeight.toString());
-        this.pan(this.zoomPx * scale);
+    zoom(scale: number) {
+        // Calculate new viewBox width and height based on scale
+        const newWidth = this.pixelWidth / scale;
+        // Keep the center the same
+        const centerX = this.dimensions.x + this.dimensions.w / 2;
+        const centerY = this.dimensions.y + this.dimensions.h / 2;
+
+        // Update dimensions and grid
+        this.zoomTo(newWidth, { x: centerX, y: centerY });
     }
 
     draw(): Promise<void> {
@@ -120,7 +124,7 @@ class Metro {
         const height = width * this.pixelHeight / this.pixelWidth;
         const Tx = center.x - width / this.pixelWidth * ((this.pixelWidth - this.pixelOffset) / 2 + this.pixelOffset);
         const Ty = center.y - height / 2;
-        this.grid.zoomTo(width, { x: Tx, y: Ty });
+        this.grid.zoomTo(width, { x: Tx, y: Ty, w: width, h: height });
 
         this.dimensions = { x: Tx, y: Ty, w: width, h: height };
     }
@@ -141,37 +145,8 @@ class Metro {
             maxY: rect.bottom,
         };
     }
-}
-class Tile {
-    pos: MetroPosition = new MetroPosition(0, 0);
 
-    draw(): SVGElement {
-        // TODO
-        throw new Error("unimplemented");
+    get scale(): number {
+        return window.innerWidth / this.dimensions.w;
     }
 }
-
-class Line {
-    metro: Metro;
-    json: JSON;
-
-    name: string = "";
-    bullet: string = "";
-    color: Color = Color.random();
-
-    constructor(metro: Metro, json: JSON) {
-        this.metro = metro;
-        this.json = json;
-    }
-
-    draw(): SVGElement {
-        // TODO
-        throw new Error("unimplemented");
-    }
-}
-
-export {
-    Metro,
-    Station,
-    Line,
-};

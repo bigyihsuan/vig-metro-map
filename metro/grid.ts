@@ -32,7 +32,6 @@ export default class Grid {
         this.context.scale(pixelRatio, pixelRatio);
 
         window.addEventListener("resize", () => this.draw());
-        // window.addEventListener("wheel", (event: WheelEvent) => this.wheel(event));
     }
 
     // the height of the inifnite canvas
@@ -65,21 +64,17 @@ export default class Grid {
         return virtualY / this.scale - this.offsetY;
     }
 
-    zoomTo(newWindowWidthPx: number, edge: { x: number; y: number }) {
-        if (!edge) edge = { x: 0, y: 0 };
-        if (newWindowWidthPx <= CELL_WIDTH_PX) {
-            newWindowWidthPx = CELL_WIDTH_PX;
+    zoomTo(svgViewWidthPx: number, edge: { x: number; y: number; w: number; h: number }) {
+        if (!edge) edge = { x: 0, y: 0, w: window.innerWidth, h: window.innerHeight };
+        if (svgViewWidthPx <= CELL_WIDTH_PX) {
+            svgViewWidthPx = CELL_WIDTH_PX;
         }
-        this.scale = newWindowWidthPx / this.width;
-        this.offsetX = -edge.x * this.scale;
-        this.offsetY = -edge.y * this.scale;
-        this.draw();
-    }
 
-    wheel(event: WheelEvent) {
-        this.scale += (Math.sign(event.deltaY) * CELL_WIDTH_PX) / this.width;
-        this.offsetX *= this.scale;
-        this.offsetY *= this.scale;
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.scale = this.width / edge.w;
+        this.offsetX = -edge.x;
+        this.offsetY = -edge.y;
         this.draw();
     }
 
@@ -94,21 +89,33 @@ export default class Grid {
 
     drawGrid() {
         if (this.canvas && this.context) {
-            const width = this.canvas.clientWidth;
-            const height = this.canvas.clientHeight;
+            const width = this.canvas.width;
+            const height = this.canvas.height;
 
             this.context.beginPath();
             this.context.strokeStyle = "rgb(233,233,233)";
             this.context.lineWidth = 1;
-            // vertical lines
-            for (let x = (this.offsetX % CELL_WIDTH_PX) * this.scale; x <= width; x += CELL_WIDTH_PX * this.scale) {
-                this.context.moveTo(x, 0);
-                this.context.lineTo(x, height);
+
+            // SVG coordinate at the top-left of the canvas
+            const svgOriginX = -this.offsetX;
+            const svgOriginY = -this.offsetY;
+
+            // Find the first SVG grid line visible on screen
+            const firstGridX = Math.floor(svgOriginX / CELL_WIDTH_PX) * CELL_WIDTH_PX - CELL_WIDTH_PX / 2;
+            const firstGridY = Math.floor(svgOriginY / CELL_WIDTH_PX) * CELL_WIDTH_PX - CELL_WIDTH_PX / 2;
+
+            // Draw vertical lines
+            for (let x = firstGridX; (x - svgOriginX) * this.scale <= width; x += CELL_WIDTH_PX) {
+                const screenX = (x - svgOriginX) * this.scale;
+                this.context.moveTo(screenX, 0);
+                this.context.lineTo(screenX, height);
             }
-            // horizontal lines
-            for (let y = (this.offsetY % CELL_WIDTH_PX) * this.scale; y <= height; y += CELL_WIDTH_PX * this.scale) {
-                this.context.moveTo(0, y);
-                this.context.lineTo(width, y);
+
+            // Draw horizontal lines
+            for (let y = firstGridY; (y - svgOriginY) * this.scale <= height; y += CELL_WIDTH_PX) {
+                const screenY = (y - svgOriginY) * this.scale;
+                this.context.moveTo(0, screenY);
+                this.context.lineTo(width, screenY);
             }
 
             this.context.stroke();
