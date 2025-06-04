@@ -30,19 +30,19 @@ export class Metro {
 
     lineWidth: number = 0.2;
 
-    constructor() {
+    constructor(initialGridSquareSizePx: number = MIN_VISUAL_CELL_WIDTH_PX) {
         this.pixelWidth = window.innerWidth;
         this.pixelHeight = window.innerHeight;
 
         this.grid = new Grid();
 
         // Set initial dimensions (x, y, w, h)
-        // Start at (0,0), width so that one grid cell is MIN_VISUAL_CELL_WIDTH_PX wide
-        const initialWidth = (window.innerWidth / MIN_VISUAL_CELL_WIDTH_PX) * CELL_WIDTH_PX;
+        // Start at (0,0), width so that one grid cell is initialGridSquareSizePx wide
+        const initialWidth = (window.innerWidth / initialGridSquareSizePx) * CELL_WIDTH_PX;
         const initialHeight = initialWidth * (this.pixelHeight / this.pixelWidth);
         this.dimensions = { x: 0, y: 0, w: initialWidth, h: initialHeight };
 
-        // Set zoomPx so that one grid square is MIN_VISUAL_CELL_WIDTH_PX wide
+        // Set zoomPx so that one grid square is initialGridSquareSizePx wide
         this.zoomPx = initialWidth;
 
         this.svg = svg("svg", {
