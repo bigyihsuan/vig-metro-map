@@ -59,7 +59,7 @@ export class Station {
             "y": y.toString(),
             "font-size": `${U}px`,
             "font-family": "Iosevka Web",
-            // "font-weight": "bold",
+            "font-weight": "bolder",
             "text-anchor": "end",
             "dominant-baseline": "central",
         }) as SVGTextElement;

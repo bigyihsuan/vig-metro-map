@@ -12,55 +12,62 @@ class Dirs {
     public static readonly W = "W";
     public static readonly NW = "NW";
 
-    private static readonly mapping: {
+    private static _mapping: {
         [key in Dir]: {
             unitOffset: MetroPosition;
             opposite: Dir;
-        } } = {
-        N: {
-            unitOffset: new MetroPosition(0, -1),
-            opposite: Dirs.S,
-        },
-        NE: {
-            unitOffset: new MetroPosition(1, -1),
-            opposite: Dirs.SW,
-        },
-        E: {
-            unitOffset: new MetroPosition(1, 0),
-            opposite: Dirs.W,
-        },
-        SE: {
-            unitOffset: new MetroPosition(1, 1),
-            opposite: Dirs.NW,
-        },
-        S: {
-            unitOffset: new MetroPosition(0, 1),
-            opposite: Dirs.N,
-        },
-        SW: {
-            unitOffset: new MetroPosition(-1, 1),
-            opposite: Dirs.NE,
-        },
-        W: {
-            unitOffset: new MetroPosition(-1, 0),
-            opposite: Dirs.E,
-        },
-        NW: {
-            unitOffset: new MetroPosition(-1, -1),
-            opposite: Dirs.SE,
-        },
+        } };
+
+    private static get mapping(): {
+        [key in Dir]: {
+            unitOffset: MetroPosition;
+            opposite: Dir;
+        } } {
+        if (!Dirs._mapping) {
+            Dirs._mapping = {
+                N: {
+                    unitOffset: new MetroPosition(0, -1),
+                    opposite: Dirs.S,
+                },
+                NE: {
+                    unitOffset: new MetroPosition(1, -1),
+                    opposite: Dirs.SW,
+                },
+                E: {
+                    unitOffset: new MetroPosition(1, 0),
+                    opposite: Dirs.W,
+                },
+                SE: {
+                    unitOffset: new MetroPosition(1, 1),
+                    opposite: Dirs.NW,
+                },
+                S: {
+                    unitOffset: new MetroPosition(0, 1),
+                    opposite: Dirs.N,
+                },
+                SW: {
+                    unitOffset: new MetroPosition(-1, 1),
+                    opposite: Dirs.NE,
+                },
+                W: {
+                    unitOffset: new MetroPosition(-1, 0),
+                    opposite: Dirs.E,
+                },
+                NW: {
+                    unitOffset: new MetroPosition(-1, -1),
+                    opposite: Dirs.SE,
+                },
+            };
+        }
+        return Dirs._mapping;
     };
 
     public static unitOffset(dir: Dir): MetroPosition {
-        return this.mapping[dir].unitOffset;
+        return Dirs.mapping[dir].unitOffset;
     }
 
     public static opposite(dir: Dir): Dir {
-        return this.mapping[dir].opposite;
-    }
-
-    public static angleDeg(dir: Dir): number {
-        return Math.floor(Math.hypot(...this.unitOffset(dir).toPair()));
+        return Dirs.mapping[dir].opposite;
     }
 }
 
