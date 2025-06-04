@@ -1,5 +1,6 @@
 import { Metro } from "./metro.js";
-import { Mouse, MouseButton } from "./mouse.js";
+import { Mouse, MouseButton } from "../shared/mouse.js";
+import { CELL_WIDTH_PX } from "../shared/constant.js";
 
 export class PanHandler {
     metro: Metro;
@@ -10,8 +11,8 @@ export class PanHandler {
         pan: (event: MouseEvent) => this.pan(event),
         endPan: () => this.endPan(),
         contextMenu: (event: MouseEvent) => this.contextMenu(event),
-        // wheel: (event: WheelEvent) => this.wheel(event),
-        resize: () => this.metro.pan(this.metro.zoom, 0, 0),
+        wheel: (event: WheelEvent) => this.wheel(event),
+        resize: () => this.metro.pan(this.metro.zoomPx, 0, 0),
     };
 
     private prevMouseButton: MouseButton | null = null;
@@ -22,7 +23,12 @@ export class PanHandler {
         this.metro = metro;
         this.div = document.getElementById("app")! as HTMLDivElement;
         window.addEventListener("resize", this.listeners.resize);
+        window.addEventListener("wheel", this.listeners.wheel);
         this.enable();
+    }
+
+    get scale(): number {
+        return window.innerWidth / this.metro.zoomPx;
     }
 
     enable() {
@@ -59,8 +65,7 @@ export class PanHandler {
             this.prevMouseX = event.clientX;
             this.prevMouseY = event.clientY;
 
-            const scale = window.innerWidth / this.metro.zoom;
-            this.metro.pan(this.metro.zoom, dx / scale, dy / scale);
+            this.metro.pan(this.metro.zoomPx, dx * this.scale, dy * this.scale);
         }
     }
 
@@ -76,7 +81,10 @@ export class PanHandler {
         event.preventDefault();
     }
 
-    // wheel(event: WheelEvent) {
-    //     throw new Error("Method not implemented.");
-    // }
+    wheel(event: WheelEvent) {
+        const sign = Math.sign(event.deltaY);
+        this.metro.zoomPx += -sign * CELL_WIDTH_PX;
+        const scale = this.metro.zoomPx / window.innerWidth;
+        this.metro.scale(scale);
+    }
 }

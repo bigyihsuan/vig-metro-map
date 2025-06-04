@@ -1,6 +1,6 @@
-import { U } from "./constant.js";
-import { MetroPosition } from "./position.js";
-import { svg } from "./svg.js";
+import { U } from "../shared/constant.js";
+import { MetroPosition } from "../shared/position.js";
+import { svg } from "../shared/svg.js";
 
 // Bullet represents a station bullet.
 class Bullet {

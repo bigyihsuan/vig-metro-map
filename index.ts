@@ -1,8 +1,8 @@
 import { Bullet } from "./metro/bullet.js";
-import { Dirs } from "./metro/dir.js";
 import { Metro } from "./metro/metro.js";
-import { MetroPosition } from "./metro/position.js";
+import { MetroPosition } from "./shared/position.js";
 import { Station } from "./metro/station.js";
+import { Dirs } from "./shared/dir.js";
 
 // add the grid at runtime so that it exists before the rest of the script is loaded
 // document.querySelector<HTMLDivElement>("#grid-container")!.innerHTML = `

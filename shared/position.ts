@@ -1,5 +1,5 @@
 import Clone from "../interface/clone.js";
-import { GRID_SQUARE } from "./constant.js";
+import { CELL_WIDTH_PX } from "./constant.js";
 import { Dir, Dirs } from "./dir.js";
 
 /** @type MetroPosition
@@ -22,8 +22,8 @@ export class MetroPosition implements Clone<MetroPosition> {
      */
     public static fromReal(x: number, y: number): MetroPosition {
         return new MetroPosition(
-            x / GRID_SQUARE,
-            y / GRID_SQUARE,
+            x / CELL_WIDTH_PX,
+            y / CELL_WIDTH_PX,
         );
     }
 
@@ -89,8 +89,8 @@ export class MetroPosition implements Clone<MetroPosition> {
      */
     toReal(): { x: number; y: number } {
         return {
-            x: this.x * GRID_SQUARE,
-            y: this.y * GRID_SQUARE,
+            x: this.x * CELL_WIDTH_PX,
+            y: this.y * CELL_WIDTH_PX,
         };
     }
 }

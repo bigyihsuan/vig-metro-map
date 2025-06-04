@@ -1,9 +1,10 @@
-import { Color } from "./color.js";
+import { Color } from "../shared/color.js";
 import Grid from "./grid.js";
 import { PanHandler } from "./pan-handler.js";
-import { MetroPosition } from "./position.js";
+import { MetroPosition } from "../shared/position.js";
 import { Station } from "./station.js";
-import { svg } from "./svg.js";
+import { svg } from "../shared/svg.js";
+import { CELL_WIDTH_PX } from "../shared/constant.js";
 
 class Metro {
     background: Tile[] = [];
@@ -18,11 +19,13 @@ class Metro {
     grid: Grid;
     panHandler: PanHandler | null = null;
 
-    zoom: number = 1;
+    zoomPx: number = CELL_WIDTH_PX;
 
     pixelWidth: number;
     pixelHeight: number;
     pixelOffset: number = 0;
+
+    // svg viewport dimensions
     dimensions: { x: number; y: number; h: number; w: number };
 
     lineWidth: number = 0.2;
@@ -55,18 +58,24 @@ class Metro {
         window.addEventListener("resize", () => this.resize());
     }
 
-    pan(zoom: number, dx: number, dy: number) {
+    pan(newWindowWidthPx: number, dx: number = 0, dy: number = 0) {
         this.svg.setAttribute(
             "viewBox",
             `${this.dimensions.x + dx},${this.dimensions.y + dy},${this.dimensions.w},${this.dimensions.h}`,
         );
         this.dimensions.x += dx;
         this.dimensions.y += dy;
-        this.grid.zoom(zoom, this.dimensions);
+        this.grid.zoomTo(newWindowWidthPx, this.dimensions);
+    }
+
+    scale(scale: number) {
+        this.svg.setAttribute("transform", `scale(${scale})`);
+        this.svg.setAttribute("width", this.pixelWidth.toString());
+        this.svg.setAttribute("height", this.pixelHeight.toString());
+        this.pan(this.zoomPx * scale);
     }
 
     draw(): Promise<void> {
-        // return new Promise<void>(() => {});
         return new Promise((resolve) => {
             document.body.appendChild(this.svg);
             function finishDraw(metro: Metro) {
@@ -94,10 +103,10 @@ class Metro {
         const minWidth = (this.extrema.maxX - this.extrema.minX) * this.pixelWidth / (this.pixelWidth - this.pixelOffset);
         const minHeight = (this.extrema.maxY - this.extrema.minY) * this.pixelWidth / (this.pixelWidth - this.pixelOffset);
 
-        this.zoom = Math.ceil(Math.max(minWidth, minHeight));
-        if (this.zoom < 15) this.zoom = 15;
+        this.zoomPx = Math.ceil(Math.max(minWidth, minHeight));
+        if (this.zoomPx <= CELL_WIDTH_PX) this.zoomPx = CELL_WIDTH_PX;
 
-        this.zoomTo(this.zoom, center);
+        this.zoomTo(this.zoomPx, center);
     }
 
     zoomTo(width: number, center: { x: number; y: number }) {
@@ -111,7 +120,7 @@ class Metro {
         const height = width * this.pixelHeight / this.pixelWidth;
         const Tx = center.x - width / this.pixelWidth * ((this.pixelWidth - this.pixelOffset) / 2 + this.pixelOffset);
         const Ty = center.y - height / 2;
-        this.grid.zoom(width, { x: Tx, y: Ty });
+        this.grid.zoomTo(width, { x: Tx, y: Ty });
 
         this.dimensions = { x: Tx, y: Ty, w: width, h: height };
     }

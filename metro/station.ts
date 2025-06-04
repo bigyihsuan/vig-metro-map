@@ -1,9 +1,9 @@
 import { Bullet } from "./bullet.js";
-import { U } from "./constant.js";
-import { Dir, Dirs } from "./dir.js";
+import { U } from "../shared/constant.js";
+import { Dir, Dirs } from "../shared/dir.js";
 import { Metro } from "./metro.js";
-import { MetroPosition } from "./position.js";
-import { svg } from "./svg.js";
+import { MetroPosition } from "../shared/position.js";
+import { svg } from "../shared/svg.js";
 
 export class Station {
     metro: Metro;

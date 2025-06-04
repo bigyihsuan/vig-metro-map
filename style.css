@@ -65,3 +65,7 @@ html, body {
 
 #svg-container svg{ transition: opacity 100ms }
 .faded{ opacity: 0.5 }
+
+.metro-map {
+    outline: 1px solid red;
+}
