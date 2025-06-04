@@ -81,7 +81,7 @@ export class PanHandler {
     wheel(event: WheelEvent) {
         const sign = Math.sign(event.deltaY);
         // Increase or decrease zoomPx by one cell width per wheel event
-        this.metro.zoomPx += -sign * CELL_WIDTH_PX;
+        this.metro.zoomPx += sign * CELL_WIDTH_PX;
         // Clamp zoomPx to a minimum value if needed
         if (this.metro.zoomPx < CELL_WIDTH_PX) this.metro.zoomPx = CELL_WIDTH_PX;
         // Calculate new scale

@@ -22,5 +22,5 @@ function setup() {
 
     metro.draw();
     metro.init();
-    metro.zoomToFit();
+    metro.zoom(metro.scale);
 }
