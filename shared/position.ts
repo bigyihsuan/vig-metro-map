@@ -1,6 +1,6 @@
 import Clone from "../interface/clone.js";
 import { CELL_WIDTH_PX } from "./constant.js";
-import { Dir, Dirs } from "./dir.js";
+import { Dir } from "./dir.js";
 
 /** @type MetroPosition
 * is a position of (int,int).
@@ -66,7 +66,7 @@ export class MetroPosition implements Clone<MetroPosition> {
      * @returns a new position
      */
     addDelta(delta: number, dir: Dir): MetroPosition {
-        return this.add(Dirs.unitOffset(dir).scale(delta));
+        return this.add(dir.unitOffset().scale(delta));
     }
 
     /**

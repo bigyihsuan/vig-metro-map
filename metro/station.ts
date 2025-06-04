@@ -18,7 +18,7 @@ export class Station {
         svg: SVGGElement,
         name: string = "",
         root: MetroPosition = new MetroPosition(0, 0),
-        dir: Dir = "S", bullets: Bullet[] = [],
+        dir: Dir = Dirs.S, bullets: Bullet[] = [],
     ) {
         this.metro = metro;
         this.svg = svg;
@@ -52,7 +52,7 @@ export class Station {
     }
 
     get label(): SVGTextElement {
-        const loc = this.root.addDelta(1, Dirs.opposite(this.dir));
+        const loc = this.root.addDelta(1, this.dir.opposite());
         const { x, y } = loc.toReal();
         const label = svg("text", {
             "x": x.toString(),

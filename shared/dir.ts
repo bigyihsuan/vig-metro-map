@@ -1,30 +1,23 @@
 import { MetroPosition } from "./position.js";
 
-type Dir = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
+type DirEnum = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
 
-class Dirs {
-    public static readonly N = "N";
-    public static readonly NE = "NE";
-    public static readonly E = "E";
-    public static readonly SE = "SE";
-    public static readonly S = "S";
-    public static readonly SW = "SW";
-    public static readonly W = "W";
-    public static readonly NW = "NW";
+class Dir {
+    constructor(private dir: DirEnum) {}
 
     private static _mapping: {
-        [key in Dir]: {
+        [key in DirEnum]: {
             unitOffset: MetroPosition;
             opposite: Dir;
         } };
 
     private static get mapping(): {
-        [key in Dir]: {
+        [key in DirEnum]: {
             unitOffset: MetroPosition;
             opposite: Dir;
         } } {
-        if (!Dirs._mapping) {
-            Dirs._mapping = {
+        if (!this._mapping) {
+            this._mapping = {
                 N: {
                     unitOffset: new MetroPosition(0, -1),
                     opposite: Dirs.S,
@@ -59,16 +52,27 @@ class Dirs {
                 },
             };
         }
-        return Dirs._mapping;
-    };
-
-    public static unitOffset(dir: Dir): MetroPosition {
-        return Dirs.mapping[dir].unitOffset;
+        return this._mapping;
     }
 
-    public static opposite(dir: Dir): Dir {
-        return Dirs.mapping[dir].opposite;
+    public unitOffset(): MetroPosition {
+        return Dir.mapping[this.dir].unitOffset;
     }
+
+    public opposite(): Dir {
+        return Dir.mapping[this.dir].opposite;
+    }
+}
+
+class Dirs {
+    public static readonly N = new Dir("N");
+    public static readonly NE = new Dir("NE");
+    public static readonly E = new Dir("E");
+    public static readonly SE = new Dir("SE");
+    public static readonly S = new Dir("S");
+    public static readonly SW = new Dir("SW");
+    public static readonly W = new Dir("W");
+    public static readonly NW = new Dir("NW");
 }
 
 export {
