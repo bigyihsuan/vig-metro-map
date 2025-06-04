@@ -12,7 +12,7 @@ export class PanHandler {
         endPan: () => this.endPan(),
         contextMenu: (event: MouseEvent) => this.contextMenu(event),
         wheel: (event: WheelEvent) => this.wheel(event),
-        resize: () => this.metro.pan(this.metro.zoomPx, 0, 0),
+        resize: () => this.resize(),
     };
 
     private prevMouseButton: MouseButton | null = null;
@@ -88,5 +88,29 @@ export class PanHandler {
         const scale = window.innerWidth / this.metro.zoomPx;
         this.metro.zoom(scale);
         this.metro.resize();
+    }
+
+    resize() {
+        // Save old zoom (SVG units per pixel)
+        const unitsPerPixel = this.metro.dimensions.w / this.metro.pixelWidth;
+
+        // Update pixel size
+        this.metro.pixelWidth = window.innerWidth;
+        this.metro.pixelHeight = window.innerHeight;
+
+        // Keep zoom the same: new SVG width = new pixel width * units per pixel
+        this.metro.dimensions.w = this.metro.pixelWidth * unitsPerPixel;
+        this.metro.dimensions.h = this.metro.pixelHeight * unitsPerPixel;
+
+        // Update SVG size attributes
+        this.metro.svg.setAttribute("width", this.metro.pixelWidth.toString());
+        this.metro.svg.setAttribute("height", this.metro.pixelHeight.toString());
+
+        // Update SVG viewBox and grid
+        this.metro.svg.setAttribute(
+            "viewBox",
+            `${this.metro.dimensions.x},${this.metro.dimensions.y},${this.metro.dimensions.w},${this.metro.dimensions.h}`,
+        );
+        this.metro.grid.zoomTo(this.metro.pixelWidth, this.metro.dimensions);
     }
 }
