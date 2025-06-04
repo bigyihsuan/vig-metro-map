@@ -12,58 +12,55 @@ class Dirs {
     public static readonly W = "W";
     public static readonly NW = "NW";
 
-    public static offset(amount: number, dir: Dir): number {
-        switch (dir) {
-            case Dirs.N:
-            case Dirs.S:
-            case Dirs.E:
-            case Dirs.W:
-                return amount;
-            default:
-                return amount / Math.sqrt(2);
-        }
-    }
+    private static readonly mapping: {
+        [key in Dir]: {
+            unitOffset: MetroPosition;
+            opposite: Dir;
+        } } = {
+        N: {
+            unitOffset: new MetroPosition(0, -1),
+            opposite: Dirs.S,
+        },
+        NE: {
+            unitOffset: new MetroPosition(1, -1),
+            opposite: Dirs.SW,
+        },
+        E: {
+            unitOffset: new MetroPosition(1, 0),
+            opposite: Dirs.W,
+        },
+        SE: {
+            unitOffset: new MetroPosition(1, 1),
+            opposite: Dirs.NW,
+        },
+        S: {
+            unitOffset: new MetroPosition(0, 1),
+            opposite: Dirs.N,
+        },
+        SW: {
+            unitOffset: new MetroPosition(-1, 1),
+            opposite: Dirs.NE,
+        },
+        W: {
+            unitOffset: new MetroPosition(-1, 0),
+            opposite: Dirs.E,
+        },
+        NW: {
+            unitOffset: new MetroPosition(-1, -1),
+            opposite: Dirs.SE,
+        },
+    };
 
     public static unitOffset(dir: Dir): MetroPosition {
-        switch (dir) {
-            case Dirs.N:
-                return new MetroPosition(0, -1);
-            case Dirs.NE:
-                return new MetroPosition(1, -1);
-            case Dirs.E:
-                return new MetroPosition(1, 0);
-            case Dirs.SE:
-                return new MetroPosition(1, 1);
-            case Dirs.S:
-                return new MetroPosition(0, 1);
-            case Dirs.SW:
-                return new MetroPosition(-1, 1);
-            case Dirs.W:
-                return new MetroPosition(-1, 0);
-            case Dirs.NW:
-                return new MetroPosition(-1, -1);
-        }
+        return this.mapping[dir].unitOffset;
     }
 
     public static opposite(dir: Dir): Dir {
-        switch (dir) {
-            case Dirs.N:
-                return Dirs.S;
-            case Dirs.NE:
-                return Dirs.SW;
-            case Dirs.E:
-                return Dirs.W;
-            case Dirs.SE:
-                return Dirs.NW;
-            case Dirs.S:
-                return Dirs.N;
-            case Dirs.SW:
-                return Dirs.NE;
-            case Dirs.W:
-                return Dirs.E;
-            case Dirs.NW:
-                return Dirs.SE;
-        }
+        return this.mapping[dir].opposite;
+    }
+
+    public static angleDeg(dir: Dir): number {
+        return Math.floor(Math.hypot(...this.unitOffset(dir).toPair()));
     }
 }
 

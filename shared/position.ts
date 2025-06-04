@@ -81,6 +81,10 @@ export class MetroPosition implements Clone<MetroPosition> {
         );
     }
 
+    toPair(): [number, number] {
+        return [this.x, this.y];
+    }
+
     toJSON() {
         return { x: this.x, y: this.y };
     }
