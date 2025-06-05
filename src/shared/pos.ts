@@ -36,7 +36,8 @@ export class Pos implements Clone<Pos> {
     }
 
     set x(x: number) {
-        this._x = Math.floor(x);
+        // this._x = Math.floor(x);
+        this._x = x;
     }
 
     get y(): number {
@@ -44,7 +45,8 @@ export class Pos implements Clone<Pos> {
     }
 
     set y(y: number) {
-        this._y = Math.floor(y);
+        // this._y = Math.floor(y);
+        this._y = y;
     }
 
     /**

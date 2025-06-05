@@ -16,7 +16,7 @@ class Dir {
                     angleRad: Math.PI * 2 / 4,
                 },
                 NE: {
-                    unitOffset: new Pos(1, -1),
+                    unitOffset: new Pos(1 * Math.SQRT1_2, -1 * Math.SQRT1_2),
                     opposite: Dirs.SW,
                     angleRad: Math.PI / 4,
                 },
@@ -26,7 +26,7 @@ class Dir {
                     angleRad: 0,
                 },
                 SE: {
-                    unitOffset: new Pos(1, 1),
+                    unitOffset: new Pos(1 * Math.SQRT1_2, 1 * Math.SQRT1_2),
                     opposite: Dirs.NW,
                     angleRad: Math.PI * 7 / 4,
                 },
@@ -36,7 +36,7 @@ class Dir {
                     angleRad: Math.PI * 6 / 4,
                 },
                 SW: {
-                    unitOffset: new Pos(-1, 1),
+                    unitOffset: new Pos(-1 * Math.SQRT1_2, 1 * Math.SQRT1_2),
                     opposite: Dirs.NE,
                     angleRad: Math.PI * 5 / 4,
                 },
@@ -46,7 +46,7 @@ class Dir {
                     angleRad: Math.PI * 4 / 4,
                 },
                 NW: {
-                    unitOffset: new Pos(-1, -1),
+                    unitOffset: new Pos(-1 * Math.SQRT1_2, -1 * Math.SQRT1_2),
                     opposite: Dirs.SE,
                     angleRad: Math.PI * 3 / 4,
                 },
