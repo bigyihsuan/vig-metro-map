@@ -1,13 +1,9 @@
 class Color {
-    r: number = 0;
-    g: number = 0;
-    b: number = 0;
-
-    constructor(r: number, g: number, b: number) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-    }
+    constructor(
+        private r: number = 0,
+        private g: number = 0,
+        private b: number = 0,
+    ) {}
 
     static fromHex(hex: string): Color {
         if (hex.length != 7) {
@@ -19,13 +15,6 @@ class Color {
         return new Color(r, g, b);
     }
 
-    toJSON(): string {
-        const r = this.r.toString(16).padStart(2, "0");
-        const g = this.g.toString(16).padStart(2, "0");
-        const b = this.b.toString(16).padStart(2, "0");
-        return `#${r}${g}${b}`;
-    }
-
     static random(): Color {
         const r = Math.floor(Math.random() * 256);
         const g = Math.floor(Math.random() * 256);
@@ -33,6 +22,19 @@ class Color {
         return new Color(r, g, b);
     }
 
+    toJSON(): string {
+        const r = this.r.toString(16).padStart(2, "0");
+        const g = this.g.toString(16).padStart(2, "0");
+        const b = this.b.toString(16).padStart(2, "0");
+        return `#${r}${g}${b}`;
+    }
+
+    toString(): string {
+        return this.toJSON();
+    }
+}
+
+class Colors {
     // #region Official Bullet Colors
     public static readonly blue = Color.fromHex("#0039a6");
     public static readonly orange = Color.fromHex("#ff6319");
@@ -98,4 +100,5 @@ class Color {
 
 export {
     Color,
+    Colors,
 };

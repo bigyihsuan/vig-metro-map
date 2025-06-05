@@ -1,3 +1,4 @@
+import { Colors } from "../shared/color.js";
 import { P, U } from "../shared/constant.js";
 import { MetroPosition } from "../shared/position.js";
 import { svg, SvgOptions } from "../shared/svg.js";
@@ -46,7 +47,7 @@ class Bullet {
         const opts = {
             "x": x.toString(),
             "y": y.toString(),
-            "fill": "white",
+            "fill": Colors.white.toString(),
             "font-size": `${U - 1.5 * P}px`,
             "font-family": "Iosevka Web",
             "font-weight": "bold",
@@ -56,7 +57,7 @@ class Bullet {
         if (this.style === "empty") {
             opts.fill = "none";
         } else if (this.style === "limited") {
-            opts.fill = "black";
+            opts.fill = Colors.black.toString();
         }
         return opts;
     }
@@ -88,23 +89,33 @@ class Bullet {
             "stroke-dasharray": "",
             "points": "",
         };
-        if (this.style === "empty") {
-            // TODO: change empty to being completely transparent. current options are for debugging only
-            opts["fill-opacity"] = "0.125";
-            opts.stroke = "black";
-            opts["stroke-dasharray"] = "1 1";
-        } else if (this.style === "limited") {
-            opts.fill = "white";
-            opts.stroke = "black";
-        } else if (this.style === "diamond") {
-            // x and y are the center of the diamond
-            const { x, y } = this.pos.toReal();
-            // starting from the left point, going counterclockwise
-            const left = [x - U / 2, y];
-            const down = [x, y + U / 2];
-            const right = [x + U / 2, y];
-            const up = [x, y - U / 2];
-            opts.points = `${left},${down},${right},${up}`;
+
+        switch (this.style) {
+            case "local":
+                break;
+            case "diamond": {
+                // x and y are the center of the diamond
+                const { x, y } = this.pos.toReal();
+                // starting from the left point, going counterclockwise
+                const left = [x - U / 2, y];
+                const down = [x, y + U / 2];
+                const right = [x + U / 2, y];
+                const up = [x, y - U / 2];
+                opts.points = `${left},${down},${right},${up}`;
+                break;
+            }
+            case "limited": {
+                opts.fill = Colors.white.toString();
+                opts.stroke = Colors.black.toString();
+                break;
+            }
+            case "empty": {
+                // TODO: change empty to being completely transparent. current options are for debugging only
+                opts["fill-opacity"] = "0.125";
+                opts.stroke = Colors.black.toString();
+                opts["stroke-dasharray"] = "1 1";
+                break;
+            }
         }
         return opts;
     }
