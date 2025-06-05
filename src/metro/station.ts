@@ -29,26 +29,46 @@ export class Station {
         return this.bullets.at(-1)?.pos ?? this.root;
     }
 
+    private get lastRootAdjacentBullet(): Bullet | undefined {
+        const idx = this.bullets.findIndex((b) => b.style === "empty");
+        return this.bullets.at(idx - 1);
+    }
+
     get label(): SVGTextElement {
         const loc = this.root.addDelta(1, this.dir.opposite());
         const { x, y } = loc.toReal();
         const label = svg("text", {
-            "x": x.toString(),
-            "y": y.toString(),
+            "x": x,
+            "y": y,
             "font-size": `${U}px`,
             "font-family": "Iosevka Web",
-            "font-weight": "bolder",
-            "font-color": Colors.black.toString(),
-            "text-anchor": "end",
+            "font-weight": "light",
+            "font-color": Colors.black,
+            "text-anchor": "center",
             "dominant-baseline": "central",
         }) as SVGTextElement;
         label.textContent = this.name;
         return label;
     }
 
+    intraTransfer(start: MetroPosition = this.root, end: MetroPosition = this.lastRootAdjacentBullet!.pos): SVGLineElement {
+        const { x: x1, y: y1 } = start.toReal();
+        const { x: x2, y: y2 } = end.toReal();
+
+        const options = {
+            x1, y1, x2, y2,
+            "stroke": Colors.black,
+            "stroke-width": U / 2,
+        };
+        const transfer = svg("line", options) as SVGLineElement;
+
+        return transfer;
+    }
+
     draw() {
         const station = svg("g");
         station.id = this.name;
+        station.appendChild(this.intraTransfer()); // draw intra transfers under the bullets
         for (const bullet of this.bullets) {
             station.appendChild(bullet.toSVG());
         }
