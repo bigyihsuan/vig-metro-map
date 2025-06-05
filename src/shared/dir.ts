@@ -1,4 +1,4 @@
-import { MetroPosition } from "./position.js";
+import { Pos } from "./pos.js";
 
 type DirEnum = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
 
@@ -11,42 +11,42 @@ class Dir {
         if (!this._mapping) {
             this._mapping = {
                 N: {
-                    unitOffset: new MetroPosition(0, -1),
+                    unitOffset: new Pos(0, -1),
                     opposite: Dirs.S,
                     angleRad: Math.PI * 2 / 4,
                 },
                 NE: {
-                    unitOffset: new MetroPosition(1, -1),
+                    unitOffset: new Pos(1, -1),
                     opposite: Dirs.SW,
                     angleRad: Math.PI / 4,
                 },
                 E: {
-                    unitOffset: new MetroPosition(1, 0),
+                    unitOffset: new Pos(1, 0),
                     opposite: Dirs.W,
                     angleRad: 0,
                 },
                 SE: {
-                    unitOffset: new MetroPosition(1, 1),
+                    unitOffset: new Pos(1, 1),
                     opposite: Dirs.NW,
                     angleRad: Math.PI * 7 / 4,
                 },
                 S: {
-                    unitOffset: new MetroPosition(0, 1),
+                    unitOffset: new Pos(0, 1),
                     opposite: Dirs.N,
                     angleRad: Math.PI * 6 / 4,
                 },
                 SW: {
-                    unitOffset: new MetroPosition(-1, 1),
+                    unitOffset: new Pos(-1, 1),
                     opposite: Dirs.NE,
                     angleRad: Math.PI * 5 / 4,
                 },
                 W: {
-                    unitOffset: new MetroPosition(-1, 0),
+                    unitOffset: new Pos(-1, 0),
                     opposite: Dirs.E,
                     angleRad: Math.PI * 4 / 4,
                 },
                 NW: {
-                    unitOffset: new MetroPosition(-1, -1),
+                    unitOffset: new Pos(-1, -1),
                     opposite: Dirs.SE,
                     angleRad: Math.PI * 3 / 4,
                 },
@@ -55,7 +55,7 @@ class Dir {
         return this._mapping;
     }
 
-    public unitOffset(): MetroPosition {
+    public unitOffset(): Pos {
         return Dir.mapping[this.dir].unitOffset;
     }
 
@@ -73,7 +73,7 @@ class Dir {
 }
 
 type Mapping = { [key in DirEnum]: {
-    unitOffset: MetroPosition;
+    unitOffset: Pos;
     opposite: Dir;
     angleRad: number;
 } };

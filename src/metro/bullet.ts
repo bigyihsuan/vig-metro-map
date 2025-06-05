@@ -1,6 +1,6 @@
 import { Colors } from "../shared/color.js";
 import { P, U } from "../shared/constant.js";
-import { MetroPosition } from "../shared/position.js";
+import { Pos } from "../shared/pos.js";
 import { svg, SvgOptions } from "../shared/svg.js";
 
 type BulletStyle = "local" | "diamond" | "limited" | "empty";
@@ -9,7 +9,7 @@ type BulletStyle = "local" | "diamond" | "limited" | "empty";
 class Bullet {
     constructor(
         public c: string,
-        public pos: MetroPosition = new MetroPosition(0, 0),
+        public pos: Pos = new Pos(0, 0),
         public style: BulletStyle = "local",
     ) {
         // when set, c truncates to the first character.

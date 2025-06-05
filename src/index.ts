@@ -1,6 +1,6 @@
 import { Bullet } from "./metro/bullet.js";
 import { Metro } from "./metro/metro.js";
-import { MetroPosition } from "./shared/position.js";
+import { Pos } from "./shared/pos.js";
 import { Station } from "./metro/station.js";
 import { Dirs } from "./shared/dir.js";
 import { CELL_WIDTH_PX } from "./shared/constant.js";
@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", setup);
 function setup() {
     const metro = new Metro(CELL_WIDTH_PX / 2);
 
-    const first = new Station(metro, metro.stationsGroup, "first", new MetroPosition(5, 5), Dirs.S);
-    const second = new Station(metro, metro.stationsGroup, "second", new MetroPosition(10, 5), Dirs.SW);
-    const third = new Station(metro, metro.stationsGroup, "third", new MetroPosition(10, 10), Dirs.W);
+    const first = new Station(metro, metro.stationsGroup, "first", new Pos(5, 5), Dirs.S);
+    const second = new Station(metro, metro.stationsGroup, "second", new Pos(10, 5), Dirs.SW);
+    const third = new Station(metro, metro.stationsGroup, "third", new Pos(10, 10), Dirs.W);
 
     for (let i = 0; i < 4; i++) {
         first.addBullet(new Bullet(String.fromCharCode("6".charCodeAt(0))));

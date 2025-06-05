@@ -2,7 +2,7 @@ import { Bullet } from "./bullet.js";
 import { U } from "../shared/constant.js";
 import { Dir, Dirs } from "../shared/dir.js";
 import { Metro } from "./metro.js";
-import { MetroPosition } from "../shared/position.js";
+import { Pos } from "../shared/pos.js";
 import { svg } from "../shared/svg.js";
 import { Colors } from "../shared/color.js";
 
@@ -11,7 +11,7 @@ export class Station {
         public metro: Metro,
         public svg: SVGGElement,
         public name: string = "",
-        public root: MetroPosition = new MetroPosition(0, 0), // the location of the root of this station.
+        public root: Pos = new Pos(0, 0), // the location of the root of this station.
         public dir: Dir = Dirs.S, // the direction that bullets will be added to this station from the root.
         public bullets: Bullet[] = [], // the ordered list of bullets, starting from the root.
         public transfers: Transfer[] = [], // stations that this transfer to
@@ -26,7 +26,7 @@ export class Station {
         this.bullets.push(bullet);
     }
 
-    private get lastBulletLocation(): MetroPosition {
+    private get lastBulletLocation(): Pos {
         return this.bullets.at(-1)?.pos ?? this.root;
     }
 
@@ -52,7 +52,7 @@ export class Station {
         return label;
     }
 
-    intraTransfer(start: MetroPosition = this.root, end: MetroPosition = this.lastRootAdjacentBullet!.pos): SVGLineElement {
+    intraTransfer(start: Pos = this.root, end: Pos = this.lastRootAdjacentBullet!.pos): SVGLineElement {
         const { x: x1, y: y1 } = start.toReal();
         const { x: x2, y: y2 } = end.toReal();
 

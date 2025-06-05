@@ -2,12 +2,12 @@ import Clone from "../interface/clone.js";
 import { CELL_WIDTH_PX } from "./constant.js";
 import { Dir } from "./dir.js";
 
-/** @type MetroPosition
+/** @type Pos
 * is a position of (int,int).
 * it represents the grid of elements of the metro.
 * all coordinates are aligned to the integer grid.
 */
-export class MetroPosition implements Clone<MetroPosition> {
+export class Pos implements Clone<Pos> {
     private _x: number = 0;
     private _y: number = 0;
 
@@ -20,15 +20,15 @@ export class MetroPosition implements Clone<MetroPosition> {
      * @param y real y-coord
      * @returns the MetroPosition at that real coordinate
      */
-    public static fromReal(x: number, y: number): MetroPosition {
-        return new MetroPosition(
+    public static fromReal(x: number, y: number): Pos {
+        return new Pos(
             x / CELL_WIDTH_PX,
             y / CELL_WIDTH_PX,
         );
     }
 
-    clone(): MetroPosition {
-        return new MetroPosition(this.x, this.y);
+    clone(): Pos {
+        return new Pos(this.x, this.y);
     }
 
     get x(): number {
@@ -52,7 +52,7 @@ export class MetroPosition implements Clone<MetroPosition> {
      * @param d the other position to add to this
      * @returns the new position
      */
-    add(d: MetroPosition): MetroPosition {
+    add(d: Pos): Pos {
         const next = this.clone();
         next.x += d.x;
         next.y += d.y;
@@ -65,7 +65,7 @@ export class MetroPosition implements Clone<MetroPosition> {
      * @param dir direction to add in
      * @returns a new position
      */
-    addDelta(delta: number, dir: Dir): MetroPosition {
+    addDelta(delta: number, dir: Dir): Pos {
         return this.add(dir.unitOffset().scale(delta));
     }
 
@@ -74,8 +74,8 @@ export class MetroPosition implements Clone<MetroPosition> {
      * @param scalar the scaling factor
      * @returns a new position, with the coordinates scaled
      */
-    scale(scalar: number): MetroPosition {
-        return new MetroPosition(
+    scale(scalar: number): Pos {
+        return new Pos(
             this.x * scalar,
             this.y * scalar,
         );

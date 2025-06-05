@@ -1,7 +1,7 @@
-import { MetroPosition } from "../shared/position.js";
+import { Pos } from "../shared/pos.js";
 
 export class Tile {
-    pos: MetroPosition = new MetroPosition(0, 0);
+    pos: Pos = new Pos(0, 0);
 
     draw(): SVGElement {
         // TODO
