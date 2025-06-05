@@ -14,6 +14,7 @@ export class Station {
         public root: MetroPosition = new MetroPosition(0, 0), // the location of the root of this station.
         public dir: Dir = Dirs.S, // the direction that bullets will be added to this station from the root.
         public bullets: Bullet[] = [], // the ordered list of bullets, starting from the root.
+        public transfers: Transfer[] = [], // stations that this transfer to
     ) { }
 
     addBullet(bullet: Bullet, direction: Dir = this.dir) {
@@ -76,3 +77,10 @@ export class Station {
         this.metro.svg.appendChild(station);
     }
 }
+
+interface Transfer {
+    station: Station;
+    kind: TransferType;
+}
+
+type TransferType = "line" | "blob" | "dotted";
