@@ -18,7 +18,8 @@ export class Station {
         svg: SVGGElement,
         name: string = "",
         root: MetroPosition = new MetroPosition(0, 0),
-        dir: Dir = Dirs.S, bullets: Bullet[] = [],
+        dir: Dir = Dirs.S,
+        bullets: Bullet[] = [],
     ) {
         this.metro = metro;
         this.svg = svg;
