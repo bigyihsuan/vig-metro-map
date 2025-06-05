@@ -57,14 +57,20 @@ Bullets may be one of the following styles:
 - Black circle + white text: always stops
 - Black-outlined white cirle + black text: limited service. White circle, with inner black outline `???p`
 
-For each station bullet, they may be connected to other station bullets by *transfers*.
-Transfers are placed underneath the station bullets.
-Transfers may be one of the following styles:
+### Transfers
 
-- Black rectangle: adjacent stations *only*. `1/2 u` wide.
-- White rounded shape: non-adjacent stations within 2 cells of each other. Black outline `???p` wide, white background. These shapes are slightly larger than the bullets (`2u`?)
-- Small black line: stations that are more than 2 cells of each other. `1p` wide
-- Dotted black line: out-of-station transfer. `1p` wide, with rounded dots `1p` diameter spaced `??? p` apart
+Transfers are objects that connect station bullets and stations together.
+There are 2 kinds of transfers: intra and inter.
+
+Intra-station transfers have exactly 1 style: a black rectangle `1/2 u` wide.
+This rectangle only connects to adjacent bullets.
+
+Inter-station transfers represent a connection between two differently-named stations.
+They can have one of three styles:
+
+- White rounded shape: for non-adjacent stations within 1 cell of each other. Black outline `???p` wide, white background. These shapes are slightly larger than the bullets. Covers the entire station.
+- Small black line: for stations that are more than 1 cell of each other. `1p` wide
+- Dotted black line: for an out-of-station transfer. `1p` wide, with rounded dots `1p` diameter spaced `??? p` apart
 
 ## Other Rail
 
