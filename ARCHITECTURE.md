@@ -68,8 +68,8 @@ This rectangle only connects to adjacent bullets.
 Inter-station transfers represent a connection between two differently-named stations.
 They can have one of three styles:
 
-- Line: for stations that are more than 1 cell of each other. Small black line, `1p` wide
-- Blob: for stations within 1 cell of each other. White rounded shape, black outline `???p` wide, white background. These shapes are slightly larger than the bullets. Covers the entire station.
+- Line: for local-local transfers. Small black line, `1p` wide
+- Blob: for express transfers. If one station is an express stop, all stations become part of the blob. White rounded shape, black outline `???p` wide, white background. These shapes are slightly larger than the bullets. Covers the entire station.
 - Dotted: for an out-of-station transfer. Dotted black line, `1p` wide, with rounded dots `1p` diameter spaced `??? p` apart
 
 ## Other Rail

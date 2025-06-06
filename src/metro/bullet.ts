@@ -3,14 +3,14 @@ import { P, U } from "../shared/constant.js";
 import { Pos } from "../shared/pos.js";
 import { svg, SvgOptions } from "../shared/svg.js";
 
-type BulletStyle = "local" | "diamond" | "limited" | "empty";
+export type BulletStyle = "local" | "diamond" | "limited" | "empty";
 
 // Bullet represents a station bullet.
-class Bullet {
+export class Bullet {
     constructor(
         public c: string,
-        public pos: Pos = new Pos(0, 0),
         public style: BulletStyle = "local",
+        public pos: Pos = new Pos(0, 0),
     ) {
         // when set, c truncates to the first character.
         if (c.length < 1) {
@@ -33,6 +33,10 @@ class Bullet {
         g.appendChild(shape);
         g.appendChild(letter);
         return g;
+    }
+
+    isEmpty(): boolean {
+        return this.style === "empty";
     }
 
     get shapeTag(): keyof SVGElementTagNameMap {
@@ -120,5 +124,3 @@ class Bullet {
         return opts;
     }
 }
-
-export { Bullet };
