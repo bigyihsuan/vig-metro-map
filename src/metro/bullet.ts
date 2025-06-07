@@ -119,7 +119,7 @@ export class Bullet {
                 // TODO: change empty to being completely transparent. current options are for debugging only
                 opts["fill-opacity"] = 0.125;
                 opts.stroke = Colors.black.toString();
-                opts["stroke-dasharray"] = "1 1";
+                opts["stroke-dasharray"] = "2 4";
                 break;
             }
         }

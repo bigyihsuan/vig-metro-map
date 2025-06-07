@@ -7,6 +7,7 @@ import { svg } from "../shared/svg.js";
 import { Colors } from "../shared/color.js";
 import { Arrays } from "../shared/array.js";
 import { Transfers } from "./transfer.js";
+import { Char } from "../interface/char.js";
 
 export class Station {
     constructor(
@@ -119,5 +120,13 @@ export class Station {
             .map((b, idx) => ({ b, idx }))
             .filter(({ b }) => b.isEmpty())
             .map(({ idx }) => idx);
+    }
+
+    getBullet(c: Char): Bullet | undefined {
+        return this.bullets.find((b) => b.c.toString() === c.toString());
+    }
+
+    hasBullet(c: Char): boolean {
+        return this.getBullet(c) !== undefined;
     }
 }

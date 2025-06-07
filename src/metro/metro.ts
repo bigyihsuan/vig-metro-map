@@ -13,9 +13,9 @@ export class Metro {
     stations: Station[] = [];
     transfers: Transfer[] = [];
 
-    backgroundGroup: SVGGElement = svg("g") as SVGGElement;
-    linesGroup: SVGGElement = svg("g") as SVGGElement;
-    stationsGroup: SVGGElement = svg("g") as SVGGElement;
+    backgroundGroup: SVGGElement = svg("g", { id: "backgrounds" }) as SVGGElement;
+    linesGroup: SVGGElement = svg("g", { id: "lines" }) as SVGGElement;
+    stationsGroup: SVGGElement = svg("g", { id: "stations" }) as SVGGElement;
 
     svg: SVGElement;
     grid: Grid;
@@ -53,6 +53,8 @@ export class Metro {
         });
         this.svg.classList.add("metro-map");
 
+        this.svg.appendChild(this.backgroundGroup);
+        this.svg.appendChild(this.linesGroup);
         this.svg.appendChild(this.stationsGroup);
         this.resize();
         this.grid.zoomTo(this.pixelWidth, this.dimensions);
@@ -104,7 +106,12 @@ export class Metro {
             document.body.appendChild(this.svg);
             function finishDraw(metro: Metro) {
                 // TODO: tiles
-                // TODO: lines
+
+                // lines underneath stations
+                for (const line of metro.lines) {
+                    line.draw();
+                }
+                // stations on top
                 for (const station of metro.stations) {
                     station.draw();
                 }
