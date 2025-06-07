@@ -1,11 +1,12 @@
 import { Bullet } from "./bullet.js";
-import { P, U } from "../shared/constant.js";
+import { U } from "../shared/constant.js";
 import { Dir, Dirs } from "../shared/dir.js";
 import { Metro } from "./metro.js";
 import { Pos } from "../shared/pos.js";
 import { svg } from "../shared/svg.js";
 import { Colors } from "../shared/color.js";
 import { Arrays } from "../shared/array.js";
+import { Transfers } from "./transfer.js";
 
 export class Station {
     constructor(
@@ -15,7 +16,6 @@ export class Station {
         public root: Pos = new Pos(0, 0), // the location of the root of this station.
         public dir: Dir = Dirs.S, // the direction that bullets will be added to this station from the root.
         public bullets: Bullet[] = [], // the ordered list of bullets, starting from the root.
-        // public transfers: Transfer[] = [], // stations that this transfer to
     ) { }
 
     addBullet(bullet: Bullet, direction: Dir = this.dir) {
@@ -29,11 +29,6 @@ export class Station {
 
     private get lastBulletLocation(): Pos {
         return this.bullets.at(-1)?.pos ?? this.root;
-    }
-
-    private get lastRootAdjacentBullet(): Bullet | undefined {
-        const idx = this.bullets.findIndex((b) => b.style === "empty");
-        return this.bullets.at(idx - 1);
     }
 
     get label(): SVGTextElement {
@@ -91,7 +86,7 @@ export class Station {
             if (group.length === 1 || !start || !end) {
                 continue;
             }
-            station.appendChild(Transfer.intraTransfer(start, end));
+            station.appendChild(Transfers.intraTransfer(start, end));
         }
         // draw line transfers between groups of bullets
         for (const pair of Arrays.successivePairs(this.adjacentBullets)) {
@@ -100,7 +95,7 @@ export class Station {
             if (start === end) {
                 continue;
             }
-            station.appendChild(Transfer.lineTransfer(start, end));
+            station.appendChild(Transfers.lineTransfer(start, end));
         }
         for (const bullet of this.bullets) {
             station.appendChild(bullet.toSVG());
@@ -109,33 +104,3 @@ export class Station {
         this.metro.svg.appendChild(station);
     }
 }
-
-class Transfer {
-    static intraTransfer(start: Bullet, end: Bullet): SVGLineElement {
-        const { x: x1, y: y1 } = start.pos.toReal();
-        const { x: x2, y: y2 } = end.pos.toReal();
-
-        const options = {
-            x1, y1, x2, y2,
-            "stroke": Colors.black,
-            "stroke-width": U / 2,
-        };
-        const transfer = svg("line", options) as SVGLineElement;
-        return transfer;
-    }
-
-    static lineTransfer(start: Bullet, end: Bullet): SVGLineElement {
-        const { x: x1, y: y1 } = start.pos.toReal();
-        const { x: x2, y: y2 } = end.pos.toReal();
-
-        const options = {
-            x1, y1, x2, y2,
-            "stroke": Colors.black,
-            "stroke-width": P,
-        };
-        const transfer = svg("line", options) as SVGLineElement;
-        return transfer;
-    }
-}
-
-// type TransferType = "line" | "blob" | "dotted";

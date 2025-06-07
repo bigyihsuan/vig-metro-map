@@ -5,11 +5,13 @@ import { svg } from "../shared/svg.js";
 import { CELL_WIDTH_PX, MIN_VISUAL_CELL_WIDTH_PX } from "../shared/constant.js";
 import { Line } from "./line.js";
 import { Tile } from "./tile.js";
+import { Transfer } from "./transfer.js";
 
 export class Metro {
     background: Tile[] = [];
     lines: Line[] = [];
     stations: Station[] = [];
+    transfers: Transfer[] = [];
 
     backgroundGroup: SVGGElement = svg("g") as SVGGElement;
     linesGroup: SVGGElement = svg("g") as SVGGElement;
