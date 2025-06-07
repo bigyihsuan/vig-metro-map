@@ -1,7 +1,8 @@
 import { Char } from "../interface/char.js";
-import { Color } from "../shared/color.js";
-import { U } from "../shared/constant.js";
-import { svg, SvgOptions } from "../shared/svg.js";
+import { Color, Colors } from "../shared/color.js";
+import { P, U } from "../shared/constant.js";
+import { Dir } from "../shared/dir.js";
+import { Path, svg, SvgOptions } from "../shared/svg.js";
 import { Metro } from "./metro.js";
 import { Station } from "./station.js";
 
@@ -23,16 +24,28 @@ export class Line {
     ) { }
 
     draw() {
-        const points = [];
+        let { x: startX, y: startY } = this.stations.at(0)!.getBullet(this.bullet)!.pos.toReal();
+        const directives = ["M", startX, startY];
+        let lastDir = null;
         for (const station of this.stations) {
-            // TODO: figure out how to add a curve to this based on the station directions
             const { x, y } = station.getBullet(this.bullet)!.pos.toReal();
-            points.push(x, y);
+            if (lastDir) {
+                this.curve(lastDir, station.dir);
+            }
+            // TODO: figure out how to add a curve to this based on the station directions
+            directives.push(...Path.quadratic(x, startY, x, y));
+            lastDir = station.dir;
+            [startX, startY] = [x, y];
         }
-        const line = svg("polyline", {
+        const line = svg("path", {
             ...this.lineStyle,
-            points: points.join(" "),
-        }) as SVGGElement;
+            d: directives.join(" "),
+        }) as SVGPathElement;
+        const padding = svg("path", {
+            ...this.paddingStyle,
+            d: directives.join(" "),
+        }) as SVGPathElement;
+        this.parentSvg.appendChild(padding);
         this.parentSvg.appendChild(line);
     }
 
@@ -51,6 +64,20 @@ export class Line {
             "stroke-linejoin": "round",
             "fill": "none",
         };
+    }
+
+    get paddingStyle(): SvgOptions {
+        return {
+            "stroke": Colors.white,
+            "stroke-width": U + 2 * P,
+            "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "fill": "none",
+        };
+    }
+
+    curve(start: Dir, end: Dir) {
+        console.log(this.bullet, start, end);
     }
 
     toJSON() {

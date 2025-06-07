@@ -14,7 +14,7 @@ function setup() {
     const metro = new Metro(CELL_WIDTH_PX / 2);
 
     const first = new Station(metro, metro.stationsGroup, "first", new Pos(5, 5), Dirs.N);
-    const second = new Station(metro, metro.stationsGroup, "second", new Pos(10, 5), Dirs.NE);
+    const second = new Station(metro, metro.stationsGroup, "second", new Pos(10, 7), Dirs.NE);
     const third = new Station(metro, metro.stationsGroup, "third", new Pos(10, 10), Dirs.E);
 
     const styles: BulletStyle[] = ["local", "diamond", "empty", "limited", "local", "empty", "empty", "local"];
@@ -41,5 +41,5 @@ function setup() {
     metro.init();
     metro.zoom(metro.scale);
 
-    console.log(JSON.stringify(metro, null, 4));
+    // console.log(JSON.stringify(metro, null, 4));
 }
