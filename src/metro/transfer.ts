@@ -1,8 +1,8 @@
-import { Colors } from "../shared/color";
-import { U, P } from "../shared/constant";
-import { svg } from "../shared/svg";
-import { Bullet } from "./bullet";
-import { Station } from "./station";
+import { Colors } from "../shared/color.js";
+import { U, P } from "../shared/constant.js";
+import { svg } from "../shared/svg.js";
+import { Bullet } from "./bullet.js";
+import { Station } from "./station.js";
 
 export class Transfers {
     static intraTransfer(start: Bullet, end: Bullet): SVGLineElement {

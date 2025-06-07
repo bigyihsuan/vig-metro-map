@@ -70,6 +70,10 @@ class Dir {
     public angleDeg(): number {
         return this.angleRad() / Math.PI * 360;
     }
+
+    toJSON() {
+        return this.dir;
+    }
 }
 
 type Mapping = { [key in DirEnum]: {

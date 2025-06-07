@@ -58,6 +58,15 @@ export class Metro {
         this.grid.zoomTo(this.pixelWidth, this.dimensions);
     }
 
+    toJSON() {
+        return {
+            background: this.background,
+            lines: this.lines,
+            stations: this.stations,
+            transfers: this.transfers,
+        };
+    }
+
     init() {
         this.panHandler = new PanHandler(this);
 
