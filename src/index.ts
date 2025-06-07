@@ -4,6 +4,7 @@ import { Pos } from "./shared/pos.js";
 import { Station } from "./metro/station.js";
 import { Dirs } from "./shared/dir.js";
 import { CELL_WIDTH_PX } from "./shared/constant.js";
+import { Char } from "./interface/char.js";
 
 document.addEventListener("DOMContentLoaded", setup);
 
@@ -16,9 +17,10 @@ function setup() {
 
     const styles: BulletStyle[] = ["local", "diamond", "empty", "limited", "local", "empty", "empty", "local"];
     for (const [idx, style] of styles.entries()) {
-        first.addBullet(new Bullet(first, String.fromCharCode("A".charCodeAt(0) + idx), style));
-        second.addBullet(new Bullet(second, String.fromCharCode("A".charCodeAt(0) + idx), style));
-        third.addBullet(new Bullet(third, String.fromCharCode("A".charCodeAt(0) + idx), style));
+        const c = new Char(String.fromCharCode("A".charCodeAt(0) + idx) + "trash");
+        first.addBullet(new Bullet(first, c, style));
+        second.addBullet(new Bullet(second, c, style));
+        third.addBullet(new Bullet(third, c, style));
     }
 
     metro.stations.push(first);

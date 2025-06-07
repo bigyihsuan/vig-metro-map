@@ -1,3 +1,4 @@
+import { Char } from "../interface/char.js";
 import { Colors } from "../shared/color.js";
 import { BULLET_FONT_SIZE, FONT, P, U } from "../shared/constant.js";
 import { Pos } from "../shared/pos.js";
@@ -10,16 +11,10 @@ export type BulletStyle = "local" | "diamond" | "limited" | "empty";
 export class Bullet {
     constructor(
         public station: Station,
-        public c: string,
+        public c: Char,
         public style: BulletStyle = "local",
         public pos: Pos = new Pos(0, 0),
-    ) {
-        // when set, c truncates to the first character.
-        if (c.length < 1) {
-            throw new Error(`invalid bullet name "${c}"`);
-        }
-        this.c = c.substring(0, 1);
-    }
+    ) { }
 
     toJSON() {
         return {
@@ -34,7 +29,7 @@ export class Bullet {
 
         const shape = svg(this.shapeTag, { ...this.shapePos, ...this.shapeStyle });
         const letter = svg("text", this.textOptions) as SVGTextElement;
-        letter.textContent = this.c;
+        letter.textContent = this.c.toString();
 
         g.appendChild(shape);
         g.appendChild(letter);
