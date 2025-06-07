@@ -1,5 +1,4 @@
 import { Char } from "../interface/char.js";
-import { Arrays } from "../shared/array.js";
 import { Color } from "../shared/color.js";
 import { U } from "../shared/constant.js";
 import { svg, SvgOptions } from "../shared/svg.js";
@@ -9,7 +8,8 @@ import { Station } from "./station.js";
 /**
  * Line links together stations with a colored line.
  * There may or may not be bullets on this line, depending on the bullet styling.
- * When drawn, Line is a series of
+ * When drawn, Line is a series of strokes connecting station bullets.
+ *
  * TODO: handles for changing the line path?
  */
 export class Line {
@@ -23,17 +23,16 @@ export class Line {
     ) { }
 
     draw() {
-        const line = svg("g") as SVGGElement;
-        for (const { first, second } of Arrays.successivePairs(this.stations)) {
+        const points = [];
+        for (const station of this.stations) {
             // TODO: figure out how to add a curve to this based on the station directions
-            const { x: x1, y: y1 } = first.getBullet(this.bullet)!.pos.toReal();
-            const { x: x2, y: y2 } = second.getBullet(this.bullet)!.pos.toReal();
-            const stroke = svg("line", {
-                ...this.lineStyle,
-                x1, y1, x2, y2,
-            }) as SVGLineElement;
-            line.appendChild(stroke);
+            const { x, y } = station.getBullet(this.bullet)!.pos.toReal();
+            points.push(x, y);
         }
+        const line = svg("polyline", {
+            ...this.lineStyle,
+            points: points.join(" "),
+        }) as SVGGElement;
         this.parentSvg.appendChild(line);
     }
 
@@ -49,6 +48,8 @@ export class Line {
             "stroke": this.color,
             "stroke-width": U,
             "stroke-linecap": "round",
+            "stroke-linejoin": "round",
+            "fill": "none",
         };
     }
 
