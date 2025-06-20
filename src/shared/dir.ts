@@ -2,10 +2,43 @@ import { Pos } from "./pos.js";
 
 type DirEnum = "N" | "NE" | "E" | "SE" | "S" | "SW" | "W" | "NW";
 
-class Dir {
+export class Dir {
     constructor(private dir: DirEnum) {}
 
     private static _mapping: Mapping;
+
+    public unitOffset(): Pos {
+        return Dir.mapping[this.dir].unitOffset;
+    }
+
+    public opposite(): Dir {
+        return Dir.mapping[this.dir].opposite;
+    }
+
+    public angleRad(): number {
+        return Dir.mapping[this.dir].angleRad;
+    }
+
+    public angleDeg(): number {
+        return this.angleRad() / Math.PI * 360;
+    }
+
+    public rotateXY(x: number, y: number): { dx: number; dy: number } {
+        return { dx: x * Math.cos(this.angleRad()), dy: y * Math.sin(this.angleRad()) };
+    }
+
+    public rotate(steps45deg: number, direction: "clockwise" | "counterclockwise"): Dir {
+        return Dirs.all.at(
+            (Dirs.all.findIndex((d) => this === d)!
+                + Math.floor(steps45deg)
+                * (direction === "clockwise" ? 1 : -1))
+            % Dirs.all.length,
+        )!;
+    }
+
+    toJSON() {
+        return this.dir;
+    }
 
     private static get mapping(): Mapping {
         if (!this._mapping) {
@@ -54,35 +87,9 @@ class Dir {
         }
         return this._mapping;
     }
-
-    public unitOffset(): Pos {
-        return Dir.mapping[this.dir].unitOffset;
-    }
-
-    public opposite(): Dir {
-        return Dir.mapping[this.dir].opposite;
-    }
-
-    public angleRad(): number {
-        return Dir.mapping[this.dir].angleRad;
-    }
-
-    public angleDeg(): number {
-        return this.angleRad() / Math.PI * 360;
-    }
-
-    toJSON() {
-        return this.dir;
-    }
 }
 
-type Mapping = { [key in DirEnum]: {
-    unitOffset: Pos;
-    opposite: Dir;
-    angleRad: number;
-} };
-
-class Dirs {
+export class Dirs {
     public static readonly N = new Dir("N");
     public static readonly NE = new Dir("NE");
     public static readonly E = new Dir("E");
@@ -91,9 +98,12 @@ class Dirs {
     public static readonly SW = new Dir("SW");
     public static readonly W = new Dir("W");
     public static readonly NW = new Dir("NW");
+
+    public static readonly all = [Dirs.N, Dirs.NE, Dirs.E, Dirs.SE, Dirs.S, Dirs.SW, Dirs.W, Dirs.NW];
 }
 
-export {
-    Dir,
-    Dirs,
-};
+type Mapping = { [key in DirEnum]: {
+    unitOffset: Pos;
+    opposite: Dir;
+    angleRad: number;
+} };
