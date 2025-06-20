@@ -1,6 +1,6 @@
 import Clone from "../interface/clone.js";
 import { CELL_WIDTH_PX } from "./constant.js";
-import { Dir } from "./dir.js";
+import { Dir, Dirs } from "./dir.js";
 
 /** @type Pos
 * is a position of (int,int).
@@ -11,9 +11,13 @@ export class Pos implements Clone<Pos> {
     private _x: number = 0;
     private _y: number = 0;
 
-    constructor(x: number, y: number) {
+    constructor(x: number = 0, y: number = 0) {
         this.x = x;
         this.y = y;
+    }
+
+    public static origin(): Pos {
+        return new Pos(0, 0);
     }
 
     /** @param x real x-coord
@@ -98,5 +102,18 @@ export class Pos implements Clone<Pos> {
             x: this.x * CELL_WIDTH_PX,
             y: this.y * CELL_WIDTH_PX,
         };
+    }
+
+    manhattanDelta(other: Pos): { dx: number; dy: number } {
+        return {
+            dx: other.x - this.x,
+            dy: other.y - this.y,
+        };
+    }
+
+    closestAngleTo(end: Pos): Dir {
+        const { dx, dy } = this.manhattanDelta(end);
+        const goal = dy / dx;
+        return Dirs.all.reduce((prev, curr) => (Math.abs(curr.angleRad() - goal) < Math.abs(prev.angleRad() - goal) ? curr : prev));
     }
 }
