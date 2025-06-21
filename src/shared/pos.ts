@@ -1,6 +1,7 @@
 import Clone from "../interface/clone.js";
 import { CELL_WIDTH_PX } from "./constant.js";
-import { Dir, Dirs } from "./dir.js";
+import { Dir } from "./dir.js";
+import { Vec2 } from "./vec2.js";
 
 /** @type Pos
 * is a position of (int,int).
@@ -72,7 +73,7 @@ export class Pos implements Clone<Pos> {
      * @returns a new position
      */
     addDelta(delta: number, dir: Dir): Pos {
-        return this.add(dir.unitOffset().scale(delta));
+        return this.add(dir.unitOffset.scale(delta));
     }
 
     /**
@@ -87,8 +88,19 @@ export class Pos implements Clone<Pos> {
         );
     }
 
+    deltas(other: Pos): { dx: number; dy: number } {
+        return {
+            dx: other.x - this.x,
+            dy: other.y - this.y,
+        };
+    }
+
     toPair(): [number, number] {
         return [this.x, this.y];
+    }
+
+    toVec2(): Vec2 {
+        return Vec2.new(this.x, this.y);
     }
 
     toJSON() {
@@ -97,23 +109,7 @@ export class Pos implements Clone<Pos> {
 
     /** converts to "real" coordinates, for SVG and canvas.
      */
-    toReal(): { x: number; y: number } {
-        return {
-            x: this.x * CELL_WIDTH_PX,
-            y: this.y * CELL_WIDTH_PX,
-        };
-    }
-
-    manhattanDelta(other: Pos): { dx: number; dy: number } {
-        return {
-            dx: other.x - this.x,
-            dy: other.y - this.y,
-        };
-    }
-
-    closestAngleTo(end: Pos): Dir {
-        const { dx, dy } = this.manhattanDelta(end);
-        const goal = dy / dx;
-        return Dirs.all.reduce((prev, curr) => (Math.abs(curr.angleRad() - goal) < Math.abs(prev.angleRad() - goal) ? curr : prev));
+    toReal(): Pos {
+        return new Pos(this.x * CELL_WIDTH_PX, this.y * CELL_WIDTH_PX);
     }
 }

@@ -78,7 +78,7 @@ export class Station {
     }
 
     get label(): SVGTextElement {
-        const loc = this.root.addDelta(1, this.dir.opposite());
+        const loc = this.root.addDelta(1, this.dir.opposite);
         const { x, y } = loc.toReal();
         const label = svg("text", {
             "x": x,

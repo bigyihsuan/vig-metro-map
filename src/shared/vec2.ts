@@ -52,10 +52,10 @@ export class Mat2x2 extends Array {
         return new Mat2x2(arr);
     }
 
-    static rotation(theta: number): Mat2x2 {
+    static rotation(angleRad: number): Mat2x2 {
         return new Mat2x2([
-            [Math.cos(theta), -Math.sin(theta)],
-            [Math.sin(theta), Math.cos(theta)],
+            [Math.cos(angleRad), -Math.sin(angleRad)],
+            [Math.sin(angleRad), Math.cos(angleRad)],
         ]);
     }
 
