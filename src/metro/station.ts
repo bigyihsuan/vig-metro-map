@@ -126,6 +126,10 @@ export class Station {
         return this.bullets.find((b) => b.c.toString() === c.toString());
     }
 
+    getBulletIdx(c: Char): number {
+        return this.bullets.findIndex((b) => b.c.toString() === c.toString());
+    }
+
     hasBullet(c: Char): boolean {
         return this.getBullet(c) !== undefined;
     }

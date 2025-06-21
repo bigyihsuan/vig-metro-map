@@ -73,7 +73,8 @@ export class Pos implements Clone<Pos> {
      * @returns a new position
      */
     addDelta(delta: number, dir: Dir): Pos {
-        return this.add(dir.unitOffset.scale(delta));
+        const offset = dir.unitOffset;
+        return this.add(new Pos(delta * offset[0], delta * offset[1]));
     }
 
     /**
@@ -88,11 +89,8 @@ export class Pos implements Clone<Pos> {
         );
     }
 
-    deltas(other: Pos): { dx: number; dy: number } {
-        return {
-            dx: other.x - this.x,
-            dy: other.y - this.y,
-        };
+    deltas(other: Pos): Pos {
+        return new Pos(other.x - this.x, other.y - this.y);
     }
 
     toPair(): [number, number] {

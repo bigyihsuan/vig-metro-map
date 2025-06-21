@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", setup);
 function setup() {
     const metro = new Metro(CELL_WIDTH_PX / 2);
 
-    const first = new Station(metro, metro.stationsGroup, "first", new Pos(5, 5), Dirs.NW);
-    const second = new Station(metro, metro.stationsGroup, "second", new Pos(15, 10), Dirs.NE);
+    const first = new Station(metro, metro.stationsGroup, "first", new Pos(5, 5), Dirs.N);
+    const second = new Station(metro, metro.stationsGroup, "second", new Pos(15, 10), Dirs.E);
     const third = new Station(metro, metro.stationsGroup, "third", new Pos(10, 10), Dirs.E);
 
     const stations = [first, second];
